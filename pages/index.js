@@ -1,33 +1,49 @@
-import App from "../components/App";
-import InfoBox from "../components/InfoBox";
-import Header from "../components/Header";
-import Submit from "../components/Submit";
-import PostList from "../components/PostList";
+import React from "react";
+import cookie from "cookie";
+import { useApolloClient } from "@apollo/react-hooks";
 import { withApollo } from "../lib/apollo";
-import "../style.css";
-import { Button } from "semantic-ui-react";
-import "fomantic-ui-css/semantic.min.css";
+import redirect from "../lib/redirect";
+import checkLoggedIn from "../lib/checkLoggedIn";
 
-const IndexPage = props => (
-  <App>
-    <Header />
-    <InfoBox>
-      <Button>Hello</Button>
-      ℹ️ This example <div className="text-purple-600">shows how </div>to fetch
-      all initial apollo queries on the server. If you <a href="/">reload</a>{" "}
-      this page you won't see a loader since Apollo fetched all needed data on
-      the server. This prevents{" "}
-      <a
-        href="https://nextjs.org/blog/next-9#automatic-static-optimization"
-        target="_blank"
-      >
-        automatic static optimization
-      </a>{" "}
-      in favour of full Server-Side-Rendering.
-    </InfoBox>
-    <Submit />
-    <PostList />
-  </App>
-);
+import Home from "../components/Home";
+
+import "../style.css";
+
+const IndexPage = ({ loggedInUser }) => {
+  const apolloClient = useApolloClient();
+
+  const signout = () => {
+    document.cookie = cookie.serialize("token", "", {
+      maxAge: -1 // Expire the cookie immediately
+    });
+
+    // Force a reload of all the current queries now that the user is
+    // logged in, so we don't accidentally leave any state around.
+    apolloClient.cache.reset().then(() => {
+      // Redirect to a more useful page when signed out
+      redirect({}, "/");
+    });
+  };
+
+  if (!loggedInUser) {
+    return <Home />;
+  }
+
+  return (
+    <div>
+      Hello {loggedInUser.email}!<br />
+      <button onClick={signout}>Sign out</button>
+    </div>
+  );
+};
+
+IndexPage.getInitialProps = async context => {
+  const { loggedInUser } = await checkLoggedIn(context.apolloClient);
+  // if (!loggedInUser.whoami) {
+  // If not signed in, send them somewhere more useful
+  // redirect(context, "/home");
+  // }
+  return { loggedInUser: loggedInUser.whoami };
+};
 
 export default withApollo(IndexPage);
