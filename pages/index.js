@@ -5,11 +5,14 @@ import Submit from "../components/Submit";
 import PostList from "../components/PostList";
 import { withApollo } from "../lib/apollo";
 import "../style.css";
+import { Button } from "semantic-ui-react";
+import "fomantic-ui-css/semantic.min.css";
 
 const IndexPage = props => (
   <App>
     <Header />
     <InfoBox>
+      <Button>Hello</Button>
       ℹ️ This example <div className="text-purple-600">shows how </div>to fetch
       all initial apollo queries on the server. If you <a href="/">reload</a>{" "}
       this page you won't see a loader since Apollo fetched all needed data on
