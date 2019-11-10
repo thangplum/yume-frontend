@@ -5,7 +5,7 @@ import { withApollo } from "../lib/apollo";
 import redirect from "../lib/redirect";
 import checkLoggedIn from "../lib/checkLoggedIn";
 
-import Home from "../components/Home";
+import Home from "../components/IndexPage";
 
 import "../style.css";
 

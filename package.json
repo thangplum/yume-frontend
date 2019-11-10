@@ -24,6 +24,7 @@
     "graphql-tag": "2.10.1",
     "https-proxy-agent": "^3.0.1",
     "isomorphic-unfetch": "^3.0.0",
+    "moment": "^2.24.0",
     "next": "latest",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
@@ -34,10 +35,11 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.6.4",
-    "@storybook/addon-actions": "^5.2.5",
-    "@storybook/addon-links": "^5.2.5",
-    "@storybook/addons": "^5.2.5",
-    "@storybook/react": "^5.2.5",
+    "@storybook/addon-actions": "^5.2.6",
+    "@storybook/addon-links": "^5.2.6",
+    "@storybook/addon-viewport": "^5.2.6",
+    "@storybook/addons": "^5.2.6",
+    "@storybook/react": "^5.2.6",
     "babel-loader": "^8.0.6"
   }
 }

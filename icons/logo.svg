@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38.944" height="42.008" viewBox="0 0 38.944 42.008">
+  <defs>
+    <style>
+      .orange {
+        fill: #f7a84e;
+      }
+
+      .pink{
+        fill: #e35793;
+      }
+
+      .green {
+        fill: #aadd69;
+      }
+
+      .blue {
+        fill: #61c7ed;
+      }
+    </style>
+  </defs>
+  <g id="logo" transform="translate(-272.771 -551.397)">
+    <path id="Path_116" data-name="Path 116" class="orange" d="M389.072,556.8c5.238,0,9.472,4.53,9.472,10.112s-4.234,10.112-9.472,10.112H379.6V566.912C379.6,561.33,383.834,556.8,389.072,556.8Z" transform="translate(-86.83 -5.403)"/>
+    <path id="Path_118" data-name="Path 118" class="pink" d="M389.823,648.728A14.343,14.343,0,0,0,397.3,646.7c-.043,17.7-7.581,21.368-17.7,21.837V648.728Z" transform="translate(-86.706 -75.132)"/>
+    <path id="Path_691" data-name="Path 691" class="green" d="M389.073,556.8c-5.238,0-9.473,4.53-9.473,10.112s4.235,10.112,9.473,10.112h9.473V566.912C398.545,561.33,394.311,556.8,389.073,556.8Z" transform="translate(-106.83 -5.403)"/>
+    <path id="Path_692" data-name="Path 692" class="blue" d="M387.073,648.728A14.344,14.344,0,0,1,379.6,646.7c.043,17.7,7.581,21.368,17.7,21.837V648.728Z" transform="translate(-105.706 -75.132)"/>
+  </g>
+</svg>

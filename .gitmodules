@@ -1,0 +1,3 @@
+[submodule "icons/entypo"]
+	path = icons/entypo
+	url = git@github.com:adamwathan/entypo-optimized.git
