@@ -25,12 +25,28 @@ function Header({ router }) {
           </Link>
         </div>
         <div className="mr-6 font-semibold flex flex-row items-center">
-          <a href="#" className="ml-8">
-            About
-          </a>
-          <a href="#" className="ml-8">
-            Log In
-          </a>
+          <Link href="/about">
+            <a
+              href="#"
+              className={
+                "ml-8 " +
+                (router && router.pathname === "/about" ? "text-yume-red" : "")
+              }
+            >
+              About
+            </a>
+          </Link>
+          <Link href="/login">
+            <a
+              href="#"
+              className={
+                "ml-8 " +
+                (router && router.pathname === "/login" ? "text-yume-red" : "")
+              }
+            >
+              Log In
+            </a>
+          </Link>
           <Link href="/forum">
             <a
               href="#"
