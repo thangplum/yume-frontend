@@ -5,6 +5,8 @@ import ForumCategory from "../../components/ForumCategory";
 import "../../style.css";
 import Banner from "../../components/Banner";
 import Header from "../../components/Header";
+import LoadingPage from "../../components/LoadingPage";
+import ErrorPage from "../../components/ErrorPage";
 
 const GET_FORUM_CATEGORIES_QUERY = gql`
   query getForumCategories {
@@ -21,8 +23,8 @@ const GET_FORUM_CATEGORIES_QUERY = gql`
 function Forum() {
   const { loading, error, data } = useQuery(GET_FORUM_CATEGORIES_QUERY);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Couldn't load</div>;
+  if (loading) return <LoadingPage />;
+  if (error) return <ErrorPage />;
 
   const { forumCategories } = data;
   return (
@@ -38,7 +40,11 @@ function Forum() {
               key={cat.id}
               className="flex flex-col w-full p-2  sm:w-1/2 md:px-12 mb-4 xl:items-center"
             >
-              <ForumCategory name={cat.name} number={10} id={cat.id} />
+              <ForumCategory
+                name={cat.name}
+                number={cat.children.length}
+                id={cat.id}
+              />
             </div>
           );
         })}

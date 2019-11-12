@@ -5,6 +5,8 @@ import { withApollo } from "../../lib/apollo";
 import ForumPost from "../../components/ForumPost";
 import ForumSubcategory from "../../components/ForumSubcategory";
 import Header from "../../components/Header";
+import LoadingPage from "../../components/LoadingPage";
+import ErrorPage from "../../components/ErrorPage";
 
 import "../../style.css";
 
@@ -26,6 +28,7 @@ const GET_CATEGORY_POSTS = gql`
           id
           comment
         }
+        likes
       }
     }
   }
@@ -40,10 +43,10 @@ function ForumPosts() {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
   if (error) {
-    return <div>Error loading posts</div>;
+    return <ErrorPage />;
   }
 
   const { name, children: subcategories, posts } = data.category;

@@ -5,3 +5,8 @@
 @tailwind utilities;
 
 /* Your custom CSS here */
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
+
+body {
+  font-family: "Lato";
+}
