@@ -46,9 +46,10 @@ function Login() {
   if (error) return <p>An error occurred</p>;
 
   return (
-    <div className="container mx-auto">
+    <div className="flex h-screen justify-center items-center">  
       <LoginForm handleLogin={handleLogin} />
     </div>
+    
   );
 }
 
