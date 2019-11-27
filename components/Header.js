@@ -9,22 +9,20 @@ function Header({ router }) {
       {/* Header for very small sizes (only logo) */}
       <div className="sm:hidden w-screen flex justify-center ">
         <a className="mt-8 text-center font-bold text-4xl inline-block cursor-pointer hover:text-black">
-          <span className="text-yume-blue">y</span>u
-          <span className="text-yume-red">m</span>e
+          <span>y</span>u<span>m</span>e
         </a>
       </div>
       {/* Header for small and anything bigger */}
       <div className="hidden sm:flex flex-row justify-between my-8 mx-12 items-center">
         <div className="ml-6">
           <Link href="/">
-            <a className="mr-3 text-center font-bold text-2xl inline-block cursor-pointer hover:text-black">
+            <a className="mr-3 text-center font-bold text-xl inline-block cursor-pointer hover:text-black">
               <img className="w-6 h-6 inline-block mr-2" src={YumeLogo} />
-              <span className="text-yume-blue">y</span>u
-              <span className="text-yume-red">m</span>e
+              <span>y</span>u<span>m</span>e
             </a>
           </Link>
         </div>
-        <div className="mr-6 font-semibold flex flex-row items-center">
+        <div className="mr-6 font-medium flex flex-row items-center">
           <Link href="/about">
             <a
               href="#"

@@ -12,7 +12,7 @@ function ForumCategory({ name, number, id }) {
       </a>
       <div className="w-full border border-b-0 border-gray-400"></div>
       <div className="py-4 text-center text-gray-600">
-        {number} questions answered
+        {number} subcategories
       </div>
     </div>
   );

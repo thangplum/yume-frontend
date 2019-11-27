@@ -1,5 +1,6 @@
 import React from "react";
 import Post from "../components/Post";
+import Reply from "../components/Reply";
 
 export default {
   title: "Feed"
@@ -12,3 +13,5 @@ const post = {
 };
 
 export const Posts = () => <Post {...post} />;
+
+export const Replies = () => <Reply />;

@@ -24,7 +24,7 @@ Like.defaultProps = {
   isLike: false
 };
 
-function Post({ caption, comment, likes }) {
+function Post({ caption, comment, likes, numReplies }) {
   return (
     <div className="max-w-3xl rounded-lg bg-white shadow-lg p-4">
       <div className="w-full px-4">
@@ -51,7 +51,9 @@ function Post({ caption, comment, likes }) {
       </div>
       <div className="mx-4 border border-b-0 border-gray-400 "></div>
       <div className="w-full mt-2 px-4 py-2 flex flex-row justify-between items-center">
-        <div className="text-xl font-medium text-gray-800">5 Answers</div>
+        <div className="text-xl font-medium text-gray-800">
+          {numReplies} Answers
+        </div>
         <div className="text-lg font-light text-gray-600 flex flex-row items-center">
           <button className="focus:outline-none">
             <Like />
@@ -66,7 +68,8 @@ function Post({ caption, comment, likes }) {
 Post.defaultProps = {
   caption: "",
   comment: "",
-  likes: 0
+  likes: 0,
+  numReplies: 0
 };
 
 export default Post;

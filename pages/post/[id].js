@@ -23,6 +23,7 @@ const GET_POST = gql`
           comment
         }
       }
+      likes
     }
   }
 `;
@@ -40,14 +41,19 @@ const Thread = () => {
   }
   if (error) return <ErrorPage />;
 
-  const { id: postId, caption, comment, created, replies } = data.post;
+  const { id: postId, caption, comment, created, replies, likes } = data.post;
 
   return (
     <div className="container mx-auto">
       <Header />
       <div className="bg-gray-200 p-8 flex items-center justify-center">
         <div className="w-full">
-          <Post caption={caption} comment={comment} />
+          <Post
+            caption={caption}
+            comment={comment}
+            likes={likes}
+            numReplies={replies.length}
+          />
         </div>
       </div>
 
