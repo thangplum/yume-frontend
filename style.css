@@ -6,6 +6,7 @@
 
 /* Your custom CSS here */
 @import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
+@import url("https://pagecdn.io/lib/font-awesome/5.10.0-11/css/all.min.css");
 
 body {
   font-family: "Lato";

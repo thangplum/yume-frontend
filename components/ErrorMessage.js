@@ -1,13 +1,7 @@
+import React from "react";
+
 export default ({ message }) => (
-  <aside>
+  <span className="max-w-sm bg-yume-red-darker text-white flex justify-center items-center py-3 font-medium text-base rounded ">
     {message}
-    <style jsx>{`
-      aside {
-        padding: 1.5em;
-        font-size: 14px;
-        color: white;
-        background-color: red;
-      }
-    `}</style>
-  </aside>
-)
+  </span>
+);
