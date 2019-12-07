@@ -2,11 +2,7 @@ import { withApollo } from "../../lib/apollo";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
-import "../../style.css";
-import Header from "../../components/Header";
-import Post from "../../components/Post";
-import ErrorPage from "../../components/ErrorPage";
-import LoadingPage from "../../components/LoadingPage";
+import { Header, Post, ErrorPage, LoadingPage } from "../../components";
 
 const GET_POST = gql`
   query Post($id: ID!) {

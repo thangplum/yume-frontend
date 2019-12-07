@@ -2,13 +2,13 @@ import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import gql from "graphql-tag";
 import { withApollo } from "../../lib/apollo";
-import ForumPost from "../../components/ForumPost";
-import ForumSubcategory from "../../components/ForumSubcategory";
-import Header from "../../components/Header";
-import LoadingPage from "../../components/LoadingPage";
-import ErrorPage from "../../components/ErrorPage";
-
-import "../../style.css";
+import {
+  ErrorPage,
+  ForumPost,
+  ForumSubcategory,
+  Header,
+  LoadingPage
+} from "../../components";
 
 const GET_CATEGORY_POSTS = gql`
   query getPostsByCategory($id: ID!) {

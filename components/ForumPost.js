@@ -4,7 +4,7 @@ import Link from "next/link";
 function ForumPost({ caption, comment, id: postId, replies, likes }) {
   return (
     <div className="max-w-3xl rounded-lg bg-white shadow-lg p-4">
-      <Link href={"/post/" + postId}>
+      <Link href="/post/[id]" as={"/post/" + postId}>
         <a className="focus:outline-none">
           <div className="px-4 py-4 text-3xl font-semibold leading-tight cursor-pointer">
             {caption}

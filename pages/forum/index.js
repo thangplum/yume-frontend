@@ -1,12 +1,13 @@
 import { useQuery, useApolloClient } from "@apollo/react-hooks";
 import { withApollo } from "../../lib/apollo";
 import gql from "graphql-tag";
-import ForumCategory from "../../components/ForumCategory";
-import "../../style.css";
-import Banner from "../../components/Banner";
-import Header from "../../components/Header";
-import LoadingPage from "../../components/LoadingPage";
-import ErrorPage from "../../components/ErrorPage";
+import {
+  Banner,
+  ErrorPage,
+  ForumCategory,
+  Header,
+  LoadingPage
+} from "../../components";
 
 const GET_FORUM_CATEGORIES_QUERY = gql`
   query getForumCategories {
