@@ -7,8 +7,6 @@ import checkLoggedIn from "../lib/checkLoggedIn";
 
 import Home from "../components/IndexPage";
 
-import "../style.css";
-
 const IndexPage = ({ loggedInUser }) => {
   const apolloClient = useApolloClient();
 
