@@ -1,45 +1,32 @@
+import { Router } from "next/router";
+import NProgress from "nprogress";
+import Meta from "./Meta";
+import "../style.css";
+import "nprogress/nprogress.css";
+
+// Handle route events to display a progress bar on route change
+Router.events.on("routeChangeStart", () => {
+  console.log("route started");
+  NProgress.start();
+});
+Router.events.on("routeChangeComplete", () => {
+  console.log("route completed");
+
+  NProgress.done();
+});
+Router.events.on("routeChangeError", () => {
+  console.log("route error");
+  NProgress.done();
+});
+
 export default ({ children }) => (
   <main>
+    <Meta />
     {children}
     <style jsx global>{`
       * {
-        font-family: Menlo, Monaco, 'Lucida Console', 'Liberation Mono',
-          'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New',
-          monospace, serif;
-      }
-      body {
-        margin: 0;
-        padding: 25px 50px;
-      }
-      a {
-        color: #22bad9;
-      }
-      p {
-        font-size: 14px;
-        line-height: 24px;
-      }
-      article {
-        margin: 0 auto;
-        max-width: 650px;
-      }
-      button {
-        align-items: center;
-        background-color: #22bad9;
-        border: 0;
-        color: white;
-        display: flex;
-        padding: 5px 7px;
-        transition: background-color 0.3s;
-      }
-      button:active {
-        background-color: #1b9db7;
-      }
-      button:disabled {
-        background-color: #b5bebf;
-      }
-      button:focus {
-        outline: none;
+        font-family: "Lato", sans-serif;
       }
     `}</style>
   </main>
-)
+);
