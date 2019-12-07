@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
-function ForumPost({ caption, comment, id: postId, replies, likes }) {
+function ForumPost({ caption, comment, id: postId, replies, likes, slug }) {
   return (
     <div className="max-w-3xl rounded-lg bg-white shadow-lg p-4">
-      <Link href="/post/[id]" as={"/post/" + postId}>
+      <Link href="/post/[slug]" as={"/post/" + slug}>
         <a className="focus:outline-none">
           <div className="px-4 py-4 text-3xl font-semibold leading-tight cursor-pointer">
             {caption}
@@ -30,7 +30,8 @@ ForumPost.defaultProps = {
   comment: "",
   id: "",
   replies: [],
-  likes: 0
+  likes: 0,
+  slug: ""
 };
 
 export default ForumPost;

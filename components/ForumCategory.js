@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { ForumCategories } from "../stories/2- Forum.stories";
 
-function ForumCategory({ name, number, id }) {
+function ForumCategory({ name, number, id, slug }) {
   return (
     <div className="max-w-sm w-full p-3 flex flex-col bg-white border rounded shadow-md">
-      <Link href="/forum/[id]" as={"/forum/" + id}>
+      <Link href="/forum/[slug]" as={"/forum/" + slug}>
         <a className="w-full py-10 text-center font-bold text-4xl cursor-pointer hover:text-yume-red">
           {name}
         </a>
@@ -21,7 +21,8 @@ function ForumCategory({ name, number, id }) {
 ForumCategory.defaultProps = {
   name: "Category",
   id: 0,
-  number: 0
+  number: 0,
+  slug: ""
 };
 
 export default ForumCategory;

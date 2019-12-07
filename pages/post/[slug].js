@@ -5,9 +5,10 @@ import { useRouter } from "next/router";
 import { Header, Post, ErrorPage, LoadingPage } from "../../components";
 
 const GET_POST = gql`
-  query Post($id: ID!) {
-    post(id: $id) {
+  query Post($slug: String!) {
+    postBySlug(slug: $slug) {
       id
+      slug
       caption
       comment
       created
@@ -26,10 +27,10 @@ const GET_POST = gql`
 
 const Thread = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { slug } = router.query;
 
   const { loading, error, data } = useQuery(GET_POST, {
-    variables: { id }
+    variables: { slug }
   });
 
   if (loading) {
@@ -37,7 +38,14 @@ const Thread = () => {
   }
   if (error) return <ErrorPage />;
 
-  const { id: postId, caption, comment, created, replies, likes } = data.post;
+  const {
+    id: postId,
+    caption,
+    comment,
+    created,
+    replies,
+    likes
+  } = data.postBySlug;
 
   return (
     <div className="container mx-auto">
@@ -55,7 +63,9 @@ const Thread = () => {
 
       <div className="bg-gray-400 flex flex-col content-center min-h-screen pl-8">
         {replies.map(reply => (
-          <div className="bg-white mt-4 ml-8 p-4 ">{reply.comment}</div>
+          <div key={reply.id} className="bg-white mt-4 ml-8 p-4 ">
+            {reply.comment}
+          </div>
         ))}
       </div>
     </div>

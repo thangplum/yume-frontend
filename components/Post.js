@@ -7,10 +7,10 @@ function Like({ isLike }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class={
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={
         "w-6 h-6 feather feather-heart text-yume-red " +
         (isLike ? "fill-current" : "")
       }

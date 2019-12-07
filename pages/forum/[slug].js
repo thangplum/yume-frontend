@@ -11,16 +11,19 @@ import {
 } from "../../components";
 
 const GET_CATEGORY_POSTS = gql`
-  query getPostsByCategory($id: ID!) {
-    category(id: $id) {
+  query getPostsByCategory($slug: String!) {
+    categoryBySlug(slug: $slug) {
       id
       name
+      slug
       children {
         id
         name
+        slug
       }
       posts {
         id
+        slug
         caption
         comment
         created
@@ -36,10 +39,10 @@ const GET_CATEGORY_POSTS = gql`
 
 function ForumPosts() {
   const router = useRouter();
-  const { id } = router.query;
+  const { slug } = router.query;
 
   const { loading, error, data } = useQuery(GET_CATEGORY_POSTS, {
-    variables: { id }
+    variables: { slug }
   });
 
   if (loading) {
@@ -49,7 +52,7 @@ function ForumPosts() {
     return <ErrorPage />;
   }
 
-  const { name, children: subcategories, posts } = data.category;
+  const { name, children: subcategories, posts } = data.categoryBySlug;
 
   return (
     <div className="container mx-auto">

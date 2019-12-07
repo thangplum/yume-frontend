@@ -14,9 +14,11 @@ const GET_FORUM_CATEGORIES_QUERY = gql`
     forumCategories {
       id
       name
+      slug
       children {
         id
         name
+        slug
       }
     }
   }
@@ -45,6 +47,7 @@ function Forum() {
                 name={cat.name}
                 number={cat.children.length}
                 id={cat.id}
+                slug={cat.slug}
               />
             </div>
           );
