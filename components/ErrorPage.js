@@ -1,10 +1,9 @@
 import React from "react";
 import ErrorSvg from "../icons/undraw_bug_fixing.svg";
-import Header from "../components/Header";
+
 function ErrorPage() {
   return (
     <div className="container mx-auto ">
-      <Header />
       <div className="flex flex-col items-center mt-32 p-6">
         <img src={ErrorSvg} style={{ width: "600px" }} />
         <p className="mt-12 font-bold text-2xl antialiased">

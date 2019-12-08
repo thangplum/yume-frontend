@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { ForumCategories } from "../stories/2- Forum.stories";
 
 function ForumCategory({ name, number, id, slug }) {
   return (

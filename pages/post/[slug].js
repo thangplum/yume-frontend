@@ -2,27 +2,62 @@ import { withApollo } from "../../lib/apollo";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
-import { Header, Post, ErrorPage, LoadingPage } from "../../components";
+import { Post, ErrorPage, LoadingPage, Reply } from "../../components";
+import Comment from "../../components/Comment";
+import Link from "next/link";
 
-const GET_POST = gql`
-  query Post($slug: String!) {
-    postBySlug(slug: $slug) {
+const fragments = {
+  user: gql`
+    fragment UserFragment on User {
+      username
+      firstName
+      lastName
+    }
+  `,
+  post: gql`
+    fragment PostFragment on Post {
       id
       slug
       caption
       comment
       created
+      likes
+    }
+  `
+};
+
+const GET_POST = gql`
+  query Post($slug: String!) {
+    postBySlug(slug: $slug) {
+      ...PostFragment
+      category {
+        id
+        name
+        slug
+      }
+      author {
+        ...UserFragment
+      }
       replies {
         id
         comment
+        likes
         comments {
           id
           comment
+          likes
+          author {
+            ...UserFragment
+          }
+        }
+        author {
+          ...UserFragment
         }
       }
-      likes
     }
   }
+  ${fragments.user}
+  ${fragments.post}
 `;
 
 const Thread = () => {
@@ -44,30 +79,67 @@ const Thread = () => {
     comment,
     created,
     replies,
-    likes
+    likes,
+    category,
+    author
   } = data.postBySlug;
 
+  const MainSection = ({ children }) => (
+    <div className="max-w-5xl p-8 flex flex-col items-start">{children}</div>
+  );
+
+  const PostContainer = ({ children }) => (
+    <div className="bg-gray-200 flex items-center justify-center mb-10">
+      {children}
+    </div>
+  );
+
+  const ThreadSection = ({ children }) => (
+    <div className="flex flex-col">{children}</div>
+  );
+
+  const CommentSection = ({ children }) => (
+    <div className="w-full flex flex-col mt-2 items-end justify-end">
+      {children}
+    </div>
+  );
   return (
     <div className="container mx-auto">
-      <Header />
-      <div className="bg-gray-200 p-8 flex items-center justify-center">
-        <div className="w-full">
+      <MainSection>
+        <div className="mb-8 pl-2 antialiased">
+          <Link href="/forum/[slug]" as={"/forum/" + category.slug}>
+            <a className="text-yume-red-darker font-bold text-lg tracking-wider cursor-pointer uppercase">
+              {category.name}
+            </a>
+          </Link>
+        </div>
+        <PostContainer>
           <Post
             caption={caption}
             comment={comment}
             likes={likes}
             numReplies={replies.length}
+            author={author}
           />
+        </PostContainer>
+        <div className="mb-8 pl-2 antialiased">
+          <p className="font-bold text-lg tracking-wider">REPLIES</p>
         </div>
-      </div>
-
-      <div className="bg-gray-400 flex flex-col content-center min-h-screen pl-8">
-        {replies.map(reply => (
-          <div key={reply.id} className="bg-white mt-4 ml-8 p-4 ">
-            {reply.comment}
-          </div>
-        ))}
-      </div>
+        <>
+          {replies.map(reply => (
+            <ThreadSection key={reply.id}>
+              <Reply {...reply} />
+              <CommentSection>
+                {reply.comments.map(comment => (
+                  <div className="max-w-2xl">
+                    <Comment key={comment.id} {...comment} />
+                  </div>
+                ))}
+              </CommentSection>
+            </ThreadSection>
+          ))}
+        </>
+      </MainSection>
     </div>
   );
 };

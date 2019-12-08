@@ -10,35 +10,154 @@ import {
   LoadingPage
 } from "../../components";
 
-const GET_CATEGORY_POSTS = gql`
-  query getPostsByCategory($slug: String!, $page: Int!, $limit: Int!) {
-    categoryBySlug(slug: $slug) {
+const fragments = {
+  category: gql`
+    fragment ForumPageCategory on Category {
       id
       name
       slug
+    }
+  `,
+  post: gql`
+    fragment ForumPagePost on Post {
+      id
+      slug
+      caption
+      comment
+      created
+      likes
+    }
+  `
+};
+
+const GET_CATEGORY_POSTS = gql`
+  query getPostsByCategory($slug: String!, $page: Int!, $limit: Int!) {
+    categoryBySlug(slug: $slug) {
+      ...ForumPageCategory
       children {
-        id
-        name
-        slug
+        ...ForumPageCategory
       }
       posts(page: $page, limit: $limit) {
         nodes {
-          id
-          slug
-          caption
-          comment
-          created
+          ...ForumPagePost
           replies(limit: 5) {
             id
             comment
           }
-          likes
         }
         pages
       }
     }
   }
+  ${fragments.category}
+  ${fragments.post}
 `;
+
+const StyledContainer = ({ children }) => (
+  <div className="flex flex-col lg:flex-row">{children}</div>
+);
+
+const SubcategorySection = ({ children }) => (
+  <div className="w-3/12 hidden lg:block ml-12 mt-12 flex flex-col items-center">
+    {children}
+  </div>
+);
+
+const MainSection = ({ children }) => (
+  <div className="w-full lg:w-9/12 flex flex-col lg:items-center mt-6">
+    {children}
+  </div>
+);
+
+const EmptyPostContaienr = ({ children }) => (
+  <div className="w-full h-full flex flex-col items-center justify-around">
+    {children}
+  </div>
+);
+
+const TitleContainer = ({ children }) => (
+  <div className="w-full flex justify-between pl-12">{children}</div>
+);
+
+const ButtonsContainer = ({ children }) => (
+  <div className="mx-10 mb-4 flex justify-end self-end">{children}</div>
+);
+
+const PostContainer = ({ children }) => (
+  <div className="max-w-4xl mb-6 p-2 lg:w-11/12">{children}</div>
+);
+
+function ForumPosts() {
+  const router = useRouter();
+  const { slug, page: page_str } = router.query;
+  const page = parseInt(page_str || 1);
+
+  const { loading, error, data } = useQuery(GET_CATEGORY_POSTS, {
+    variables: { slug, page, limit: 10 }
+  });
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+  if (error) {
+    return <ErrorPage />;
+  }
+
+  const { categoryBySlug: category } = data;
+  const { name, children: subcategories, posts: post_resp } = category;
+  const { nodes: posts, pages } = post_resp;
+
+  return (
+    <div className="container mx-auto">
+      <StyledContainer>
+        <SubcategorySection>
+          <ForumSubcategory title={name} list={subcategories} />
+        </SubcategorySection>
+        <MainSection>
+          {!posts || posts.length === 0 ? (
+            <EmptyPostContaienr>
+              <p className="text-2xl">No posts to show</p>
+              <Link href="/forum" replace>
+                <p class="cursor-pointer text-yume-red underline">
+                  Go back to Forum
+                </p>
+              </Link>
+            </EmptyPostContaienr>
+          ) : (
+            <>
+              <TitleContainer>
+                <p className="text-yume-red-darker text-2xl font-bold uppercase tracking-wider">
+                  {name}
+                </p>
+                <ButtonsContainer>
+                  <LeftPageButton
+                    router={router}
+                    title="Previous"
+                    href={`/forum/${slug}?page=${page - 1}`}
+                    isHidden={page === 1}
+                  />
+                  <RightPageButton
+                    router={router}
+                    title="Next"
+                    href={`/forum/${slug}?page=${page + 1}`}
+                    isHidden={page === pages}
+                  />
+                </ButtonsContainer>
+              </TitleContainer>
+              <>
+                {posts.map(post => (
+                  <PostContainer key={post.id}>
+                    <ForumPost {...post} />
+                  </PostContainer>
+                ))}
+              </>
+            </>
+          )}
+        </MainSection>
+      </StyledContainer>
+    </div>
+  );
+}
 
 const LeftPageButton = ({ router, href, title, isHidden }) => (
   <button
@@ -93,102 +212,5 @@ const RightPageButton = ({ router, href, title, isHidden }) => (
     </svg>
   </button>
 );
-
-const StyledContainer = ({ children }) => (
-  <div className="flex flex-col lg:flex-row">{children}</div>
-);
-
-const SubcategorySection = ({ children }) => (
-  <div className="w-3/12 hidden lg:block ml-12 mt-12 flex flex-col items-center">
-    {children}
-  </div>
-);
-
-const MainSection = ({ children }) => (
-  <div className="w-full lg:w-9/12 flex flex-col lg:items-end mt-6">
-    {children}
-  </div>
-);
-
-const EmptyPostContaienr = ({ children }) => {
-  <div className="w-full h-full flex flex-col items-center justify-around">
-    {children}
-  </div>;
-};
-
-const ButtonsContainer = ({ children }) => (
-  <div className="mx-10 mb-4 flex justify-end ">{children}</div>
-);
-
-const PostContainer = ({ children }) => (
-  <div className="mb-6 p-2 lg:w-11/12">{children}</div>
-);
-
-function ForumPosts() {
-  const router = useRouter();
-  const { slug, page: page_str } = router.query;
-  const page = parseInt(page_str || 1);
-
-  const { loading, error, data } = useQuery(GET_CATEGORY_POSTS, {
-    variables: { slug, page, limit: 10 }
-  });
-
-  if (loading) {
-    return <LoadingPage />;
-  }
-  if (error) {
-    return <ErrorPage />;
-  }
-
-  const { categoryBySlug: category } = data;
-  const { name, children: subcategories, posts: post_resp } = category;
-  const { nodes: posts, pages } = post_resp;
-
-  return (
-    <div className="container mx-auto">
-      <StyledContainer>
-        <SubcategorySection>
-          <ForumSubcategory title={name} list={subcategories} />
-        </SubcategorySection>
-        <MainSection>
-          {posts.length === 0 ? (
-            <EmptyPostContaienr>
-              <p className="text-2xl">No posts to show</p>
-              <Link href="/forum" replace>
-                <p class="cursor-pointer text-yume-red underline">
-                  Go back to Forum
-                </p>
-              </Link>
-            </EmptyPostContaienr>
-          ) : (
-            <>
-              <ButtonsContainer>
-                <LeftPageButton
-                  router={router}
-                  title="Previous"
-                  href={`/forum/${slug}?page=${page - 1}`}
-                  isHidden={page === 1}
-                />
-                <RightPageButton
-                  router={router}
-                  title="Next"
-                  href={`/forum/${slug}?page=${page + 1}`}
-                  isHidden={page === pages}
-                />
-              </ButtonsContainer>
-              <>
-                {posts.map(post => (
-                  <PostContainer key={post.id}>
-                    <ForumPost {...post} />
-                  </PostContainer>
-                ))}
-              </>
-            </>
-          )}
-        </MainSection>
-      </StyledContainer>
-    </div>
-  );
-}
 
 export default withApollo(ForumPosts);
