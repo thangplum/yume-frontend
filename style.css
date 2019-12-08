@@ -11,3 +11,17 @@
 body {
   font-family: "Lato";
 }
+
+#nprogress .bar {
+  background: #e77470;
+  height: 3px;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #e77470, 0 0 5px #e77470;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #e77470;
+  border-left-color: #e77470;
+}

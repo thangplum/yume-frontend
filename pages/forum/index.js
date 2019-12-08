@@ -5,7 +5,6 @@ import {
   Banner,
   ErrorPage,
   ForumCategory,
-  Header,
   LoadingPage
 } from "../../components";
 
@@ -32,9 +31,6 @@ function Forum() {
   const { forumCategories } = data;
   return (
     <div>
-      <div className="container mx-auto">
-        <Header />
-      </div>
       <Banner title="Welcome to the Best College Forum." />
       <div className="flex flex-wrap mt-6">
         {forumCategories.map(cat => {

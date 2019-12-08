@@ -1,8 +1,9 @@
 import { Router } from "next/router";
 import NProgress from "nprogress";
 import Meta from "./Meta";
-import "../style.css";
 import "nprogress/nprogress.css";
+import "../style.css";
+import { Header } from ".";
 
 // Handle route events to display a progress bar on route change
 Router.events.on("routeChangeStart", () => {
@@ -20,8 +21,9 @@ Router.events.on("routeChangeError", () => {
 });
 
 export default ({ children }) => (
-  <main>
+  <main className="bg-gray-100">
     <Meta />
+    <Header />
     {children}
     <style jsx global>{`
       * {

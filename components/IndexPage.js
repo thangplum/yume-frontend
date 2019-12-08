@@ -7,15 +7,14 @@ import YumeHomeDemo from "../icons/yume_home_demo.svg";
 import Header from "./Header";
 
 const IndexPage = () => (
-  <div>
+  <div className="bg-white">
     <div className="container mx-auto">
-      <Header />
       {/* Content */}
-      <div className="mt-12 sm:mt-24 ml-12 md:ml-32 relative">
+      <div className="pt-12 sm:pt-24 ml-12 md:ml-32 relative">
         <img
           src={YumeHumaans}
           className="hidden lg:block absolute"
-          style={{ width: "600px", top: "0px", right: "30px" }}
+          style={{ width: "600px", top: "6rem", right: "30px" }}
         />
         <p className="text-5xl font-semibold antialiased">
           We help <br /> college students network
