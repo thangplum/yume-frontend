@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import gql from "graphql-tag";
-import { withApollo } from "../../lib/apollo";
+
 import {
   ErrorPage,
   ForumPost,
@@ -133,13 +133,19 @@ function ForumPosts() {
                   <LeftPageButton
                     router={router}
                     title="Previous"
-                    href={`/forum/${slug}?page=${page - 1}`}
+                    routeParams={{
+                      pathname: `/forum/${slug}`,
+                      query: { page: page - 1 }
+                    }}
                     isHidden={page === 1}
                   />
                   <RightPageButton
                     router={router}
                     title="Next"
-                    href={`/forum/${slug}?page=${page + 1}`}
+                    routeParams={{
+                      pathname: `/forum/${slug}`,
+                      query: { page: page + 1 }
+                    }}
                     isHidden={page === pages}
                   />
                 </ButtonsContainer>
@@ -159,14 +165,14 @@ function ForumPosts() {
   );
 }
 
-const LeftPageButton = ({ router, href, title, isHidden }) => (
+const LeftPageButton = ({ router, routeParams, title, isHidden }) => (
   <button
     className={
       "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg flex items-center justify-around p-2 text-yume-red-darker mr-6" +
       (isHidden ? " hidden" : "")
     }
     onClick={() => {
-      router.push(href);
+      router.push(routeParams);
     }}
   >
     <svg
@@ -186,14 +192,14 @@ const LeftPageButton = ({ router, href, title, isHidden }) => (
   </button>
 );
 
-const RightPageButton = ({ router, href, title, isHidden }) => (
+const RightPageButton = ({ router, routeParams, title, isHidden }) => (
   <button
     className={
       "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg p-2  flex items-center justify-around text-yume-red-darker" +
       (isHidden ? " hidden" : "")
     }
     onClick={() => {
-      router.push(href);
+      router.push(routeParams);
     }}
   >
     {title}
@@ -213,4 +219,4 @@ const RightPageButton = ({ router, href, title, isHidden }) => (
   </button>
 );
 
-export default withApollo(ForumPosts);
+export default ForumPosts;

@@ -1,5 +1,4 @@
 import { useQuery, useApolloClient } from "@apollo/react-hooks";
-import { withApollo } from "../../lib/apollo";
 import gql from "graphql-tag";
 import {
   Banner,
@@ -53,4 +52,4 @@ function Forum() {
   );
 }
 
-export default withApollo(Forum);
+export default Forum;

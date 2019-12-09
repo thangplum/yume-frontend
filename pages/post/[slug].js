@@ -1,4 +1,3 @@
-import { withApollo } from "../../lib/apollo";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
@@ -131,8 +130,8 @@ const Thread = () => {
               <Reply {...reply} />
               <CommentSection>
                 {reply.comments.map(comment => (
-                  <div className="max-w-2xl">
-                    <Comment key={comment.id} {...comment} />
+                  <div key={comment.id} className="max-w-2xl">
+                    <Comment {...comment} />
                   </div>
                 ))}
               </CommentSection>
@@ -144,19 +143,4 @@ const Thread = () => {
   );
 };
 
-// Post.getInitialProps = async ctx => {
-//   const { id } = ctx.query;
-//   const client = ctx.apolloClient;
-//   try {
-//     let { data } = await client.query({
-//       query: GET_POST,
-//       variables: { id: id }
-//     });
-//     console.log(data);
-//   } catch (e) {
-//     console.error(e);
-//   }
-//   return { id };
-// };
-
-export default withApollo(Thread);
+export default Thread;

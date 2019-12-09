@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-function ForumCategory({ name, number, id, slug }) {
+function ForumCategory({ name, number, slug }) {
   return (
     <div className="max-w-sm w-full p-3 flex flex-col bg-white border rounded shadow-md">
       <Link href="/forum/[slug]" as={"/forum/" + slug}>

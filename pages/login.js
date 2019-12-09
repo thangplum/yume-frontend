@@ -3,12 +3,13 @@ import gql from "graphql-tag";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
 
-import { withApollo } from "../lib/apollo";
 import LoginForm from "../components/LoginForm";
 import { useState } from "react";
+import { CURRENT_USER_QUERY } from "../components/User";
 
 function Login() {
   const client = useApolloClient();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const showError = errorMsg => {
@@ -73,4 +74,4 @@ function Login() {
   );
 }
 
-export default withApollo(Login);
+export default Login;

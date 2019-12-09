@@ -9,7 +9,7 @@ function ForumSubcategory({ title, list, slug }) {
       </div>
       <div className="p-4 text-xl font-medium flex flex-col">
         {list.map(item => (
-          <Link id={item.slug} href="/forum/[slug]" as={"/forum/" + item.slug}>
+          <Link key={item.slug} href="/forum/[slug]" as={"/forum/" + item.slug}>
             <a className="px-4 my-4 text-yume-blue-dark hover:text-yume-red cursor-pointer">
               {item.name}
             </a>
