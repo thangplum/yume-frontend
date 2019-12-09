@@ -1,4 +1,3 @@
-import "../style.css";
 import React, { useState } from "react";
 import * as validator from "validator";
 import ErrorMessage from "../components/ErrorMessage";

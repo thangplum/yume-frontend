@@ -1,8 +1,6 @@
 import { Router } from "next/router";
 import NProgress from "nprogress";
 import Meta from "./Meta";
-import "nprogress/nprogress.css";
-import "../style.css";
 import { Header } from ".";
 
 // Handle route events to display a progress bar on route change

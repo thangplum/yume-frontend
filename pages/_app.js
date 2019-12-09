@@ -2,7 +2,8 @@ import App from "next/app";
 import AppComponent from "../components/App";
 import { ApolloProvider } from "@apollo/react-hooks";
 import withApollo from "../lib/withApollo";
-import Head from "next/head";
+import "nprogress/nprogress.css";
+import "../style.css";
 
 class YumeApp extends App {
   static getInitialProps = async ({ Component, ctx }) => {

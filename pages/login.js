@@ -1,11 +1,9 @@
 import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { useState } from "react";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
-
 import LoginForm from "../components/LoginForm";
-import { useState } from "react";
-import { CURRENT_USER_QUERY } from "../components/User";
 
 function Login() {
   const client = useApolloClient();
@@ -26,12 +24,10 @@ function Login() {
     document.cookie = cookie.serialize("token", token, {
       sameSite: true,
       path: "/",
-      maxAge: 30 * 24 * 60 * 60 // 30 days
+      maxAge: 1 * 24 * 60 * 60 // 1 day
     });
-
-    // Force a reload of all the current queries now that the user is
-    // logged in
-    client.cache.reset().then(() => {
+    // Force a reload of all the current queries now that the user is logged in
+    client.resetStore().then(() => {
       redirect({}, "/");
     });
   };
