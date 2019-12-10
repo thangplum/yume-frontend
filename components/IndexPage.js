@@ -3,8 +3,9 @@ import Link from "next/link";
 import YumeHumaans from "../icons/yume_home_humans_1.svg";
 import HumanLabCoat from "../icons/yume_human_blue_lab_coat.svg";
 import HumanYellowTwo from "../icons/yume_human_yellow_two.svg";
-import YumeHomeDemo from "../icons/yume_home_demo.svg";
 import ForumDisplayImage from "../icons/forum_display.svg";
+import ProfileDisplayImage from "../icons/profile_display.svg";
+import ThreadDisplayImage from "../icons/thread_display.svg";
 
 const Buttons = ({ selected, select }) => (
   <div>
@@ -167,27 +168,60 @@ const Buttons = ({ selected, select }) => (
     `}</style>
   </div>
 );
-const ForumDisplay = ({ select, selected }) => (
-  <div className="bg-gray-200 ">
-    <div className="container mx-auto flex justify-around">
-      <div className="flex flex-col pt-40">
-        <Buttons select={select} selected={selected} />
+const ForumDisplay = ({ select, selected }) => {
+  const text = [
+    {
+      title: "Find the right community to engage in discussion",
+      sub:
+        "With over 20 different communities to join. Yume is the best place to start conversing"
+    },
+    {
+      title: "Browse and find the right people with shared interests",
+      sub:
+        "We are building the largest network of college students with the people you are looking for"
+    },
+    {
+      title: "Participate in discussions you care about",
+      sub:
+        "With over 20 different communities to join. Yume is the best place to start conversing"
+    }
+  ];
+  return (
+    <div className="bg-gray-200 ">
+      <div className="container mx-auto flex justify-around">
+        <div className="flex flex-col pt-20">
+          <Buttons select={select} selected={selected} />
+          <div className="max-w-xs mt-6">
+            <p className="font-extrabold text-2xl text-yume-blue-dark tracking-wider">
+              {text[selected].title}
+            </p>
+            <p className="font-medium text-lg text-gray-800 mt-4">
+              {text[selected].sub}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col items-end justify-end mt-12">
+          <img
+            width={700}
+            className="img-shadow rounded-tl-lg rounded-tr-lg"
+            src={
+              selected === 0
+                ? ForumDisplayImage
+                : selected === 1
+                ? ProfileDisplayImage
+                : ThreadDisplayImage
+            }
+          />
+        </div>
       </div>
-      <div className="flex flex-col items-end justify-end mt-12">
-        <img
-          width={700}
-          className="img-shadow rounded-tl-lg rounded-tr-lg"
-          src={selected === 0 ? ForumDisplayImage : ForumDisplayImage}
-        />
-      </div>
+      <style jsx>{`
+        .img-shadow {
+          box-shadow: -10px -10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+      `}</style>
     </div>
-    <style jsx>{`
-      .img-shadow {
-        box-shadow: -10px -10px 15px -3px rgba(0, 0, 0, 0.1);
-      }
-    `}</style>
-  </div>
-);
+  );
+};
 function IndexPage() {
   const [selected, select] = useState(0);
   return (
@@ -203,11 +237,11 @@ function IndexPage() {
           <p className="text-5xl font-semibold antialiased">
             We help <br /> college students network
           </p>
-          <p className="tracking-wide text-sm border-l-4 border-gray-700 pl-2 text-gray-700">
+          <p className="tracking-wide text-sm border-l-4 border-gray-700 pl-2 text-gray-700 mt-4 leading-loose">
             With our diverse team we are building the best resource for college
-            students to network <br /> with each other
+            students <br /> to network with each other
           </p>
-          <Link href="/forum">
+          <Link href="/login">
             <button className="mt-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-blue">
               Join Now
             </button>
@@ -281,9 +315,11 @@ const BigDemoHero = () => (
       <p className="font-bold text-3xl max-w-xl">
         Browse through your customized feed, forums and user profiles
       </p>
-      <button className="mt-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-blue">
-        Goto Forums
-      </button>
+      <Link href="/forum">
+        <button className="my-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-blue">
+          Goto Forums
+        </button>
+      </Link>
     </div>
     {/* <img
       className="mt-16 rounded-lg"
