@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="842" height="603" viewBox="0 0 842 603">
+  <defs>
+    <filter id="Rectangle_828" x="27.5" y="127.5" width="269" height="295" filterUnits="userSpaceOnUse">
+      <feOffset dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_829" x="321" y="125" width="496" height="195" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_829-2" x="321" y="347" width="496" height="195" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-3"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_356" data-name="Group 356" transform="translate(-438 -95)">
+    <path id="Rectangle_827" data-name="Rectangle 827" d="M20,0H842a0,0,0,0,1,0,0V603a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V20A20,20,0,0,1,20,0Z" transform="translate(438 95)" fill="#fff"/>
+    <text id="Admissions" transform="translate(563 158)" fill="#e77470" font-size="35" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em" opacity="0.858"><tspan x="-93.17" y="0">Admissions</tspan></text>
+    <g transform="matrix(1, 0, 0, 1, 438, 95)" filter="url(#Rectangle_828)">
+      <path id="Rectangle_828-2" data-name="Rectangle 828" d="M10,0H250a10,10,0,0,1,10,10V286a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V10A10,10,0,0,1,10,0Z" transform="translate(32 131)" fill="#fff"/>
+    </g>
+    <text id="Test_Prep" data-name="Test Prep" transform="translate(500 332)" fill="#4a5568" font-size="22" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">Test Prep</tspan></text>
+    <text id="College_Stats" data-name="College Stats" transform="translate(500 384)" fill="#4a5568" font-size="22" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">College Stats</tspan></text>
+    <text id="Scholarships" transform="translate(500 436)" fill="#4a5568" font-size="22" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">Scholarships</tspan></text>
+    <text id="Financial_Aid" data-name="Financial Aid" transform="translate(500 488)" fill="#4a5568" font-size="22" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">Financial Aid</tspan></text>
+    <path id="Rectangle_832" data-name="Rectangle 832" d="M10,0H250a10,10,0,0,1,10,10V54a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V10A10,10,0,0,1,10,0Z" transform="translate(470 226)" fill="#ea8884"/>
+    <text id="Subcategory" transform="translate(500 262)" fill="#fff" font-size="22" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">Subcategory</tspan></text>
+    <g id="Group_354" data-name="Group 354">
+      <g transform="matrix(1, 0, 0, 1, 438, 95)" filter="url(#Rectangle_829)">
+        <rect id="Rectangle_829-3" data-name="Rectangle 829" width="478" height="177" rx="15" transform="translate(330 131)" fill="#fff"/>
+      </g>
+      <text id="Where_is_the_best_on-campus_meal_at_Stanford_" data-name="Where is the best on-campus meal at Stanford?" transform="translate(788 263)" fill="#4a5568" font-size="20" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.02em"><tspan x="0" y="0">Where is the best on-campus meal at Stanford?</tspan></text>
+      <text id="I_am_going_to_be_joining_Stanford_in_coming_Fall._Was_wondering_if_anyone_there_could_tell_me_what_to_expect_from_on-campus_food_places_" data-name="I am going to be joining Stanford in coming Fall. Was wondering if anyone there could tell me what to expect from on-campus food places?" transform="translate(788 282)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="16">I am going to be joining Stanford in coming Fall. Was </tspan><tspan x="0" y="40">wondering if anyone there could tell me what to expect </tspan><tspan x="0" y="64">from on-campus food places?</tspan></text>
+      <line id="Line_94" data-name="Line 94" x2="437" transform="translate(788.5 365.5)" fill="none" stroke="#c5cfd6" stroke-width="0.5"/>
+      <text id="_20_Answers" data-name="20 Answers" transform="translate(798 389)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="0">20 </tspan><tspan y="0" font-family="Lato-Semibold, Lato" font-weight="600">Answers</tspan></text>
+      <text id="_45_Likes" data-name="45 Likes" transform="translate(1155 389)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="0">45 Likes</tspan></text>
+    </g>
+    <g id="Group_355" data-name="Group 355" transform="translate(0 222)">
+      <g transform="matrix(1, 0, 0, 1, 438, -127)" filter="url(#Rectangle_829-2)">
+        <rect id="Rectangle_829-4" data-name="Rectangle 829" width="478" height="177" rx="15" transform="translate(330 353)" fill="#fff"/>
+      </g>
+      <text id="How_important_is_research_for_college_apps_" data-name="How important is research for college apps?
+" transform="translate(788 263)" fill="#4a5568" font-size="20" font-family="Lato-Bold, Lato" font-weight="700" letter-spacing="0.02em"><tspan x="0" y="0">How important is research for college apps?</tspan><tspan x="0" y="70"></tspan></text>
+      <text id="Currently_a_junior_in_HS_and_rejected_from_some_summer_programs_and_I_doubt_professors_still_want_interns_in_their_labs._So_was_wondering_how_to_get_exposure_" data-name="Currently a junior in HS and rejected from some summer programs and I doubt professors still want interns in their labs. So was wondering, how to get exposure?" transform="translate(788 282)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="16">Currently a junior in HS and rejected from some summer </tspan><tspan x="0" y="40">programs and I doubt professors still want interns in their </tspan><tspan x="0" y="64">labs. So was wondering, how to get exposure?</tspan></text>
+      <line id="Line_94-2" data-name="Line 94" x2="437" transform="translate(788.5 365.5)" fill="none" stroke="#c5cfd6" stroke-width="0.5"/>
+      <text id="_14_Answers" data-name="14 Answers" transform="translate(798 389)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="0">14 </tspan><tspan y="0" font-family="Lato-Semibold, Lato" font-weight="600">Answers</tspan></text>
+      <text id="_38_Likes" data-name="38 Likes" transform="translate(1155 389)" fill="#4a5568" font-size="16" font-family="Lato-Regular, Lato" letter-spacing="0.02em"><tspan x="0" y="0">38 Likes</tspan></text>
+    </g>
+  </g>
+</svg>
