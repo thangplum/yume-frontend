@@ -134,7 +134,8 @@ function ForumPosts() {
                     router={router}
                     title="Previous"
                     routeParams={{
-                      pathname: `/forum/${slug}`,
+                      pathname: "/forum/[slug]",
+                      as: `/forum/${slug}?page=${page - 1}`,
                       query: { page: page - 1 }
                     }}
                     isHidden={page === 1}
@@ -143,7 +144,8 @@ function ForumPosts() {
                     router={router}
                     title="Next"
                     routeParams={{
-                      pathname: `/forum/${slug}`,
+                      pathname: "/forum/[slug]",
+                      as: `/forum/${slug}?page=${page + 1}`,
                       query: { page: page + 1 }
                     }}
                     isHidden={page === pages}
@@ -165,16 +167,28 @@ function ForumPosts() {
   );
 }
 
-const LeftPageButton = ({ router, routeParams, title, isHidden }) => (
+const FuncPageButton = ({ router, routeParams, children, isHidden }) => (
   <button
     className={
-      "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg flex items-center justify-around p-2 text-yume-red-darker mr-6" +
+      "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg flex items-center justify-around p-2 text-yume-red-darker mr-6 outline-none" +
       (isHidden ? " hidden" : "")
     }
     onClick={() => {
-      router.push(routeParams);
+      // Needs full query on "as" for displaying on url bar, "query" for query data
+      // and pathname has to match the filename
+      // Note: Throws errors if not provided all three params
+      router.push(
+        { pathname: routeParams.pathname, query: routeParams.query },
+        routeParams.as
+      );
     }}
   >
+    {children}
+  </button>
+);
+
+const LeftPageButton = props => (
+  <FuncPageButton {...props}>
     <svg
       x="0px"
       y="0px"
@@ -184,25 +198,17 @@ const LeftPageButton = ({ router, routeParams, title, isHidden }) => (
     >
       <path
         d="M12.452,4.516c0.446,0.436,0.481,1.043,0,1.576L8.705,10l3.747,3.908c0.481,0.533,0.446,1.141,0,1.574
-	c-0.445,0.436-1.197,0.408-1.615,0c-0.418-0.406-4.502-4.695-4.502-4.695C6.112,10.57,6,10.285,6,10s0.112-0.57,0.335-0.789
-	c0,0,4.084-4.287,4.502-4.695C11.255,4.107,12.007,4.08,12.452,4.516z"
+        c-0.445,0.436-1.197,0.408-1.615,0c-0.418-0.406-4.502-4.695-4.502-4.695C6.112,10.57,6,10.285,6,10s0.112-0.57,0.335-0.789
+        c0,0,4.084-4.287,4.502-4.695C11.255,4.107,12.007,4.08,12.452,4.516z"
       />
     </svg>
-    {title}
-  </button>
+    {props.title}
+  </FuncPageButton>
 );
 
-const RightPageButton = ({ router, routeParams, title, isHidden }) => (
-  <button
-    className={
-      "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg p-2  flex items-center justify-around text-yume-red-darker" +
-      (isHidden ? " hidden" : "")
-    }
-    onClick={() => {
-      router.push(routeParams);
-    }}
-  >
-    {title}
+const RightPageButton = props => (
+  <FuncPageButton {...props}>
+    {props.title}
     <svg
       x="0px"
       y="0px"
@@ -212,11 +218,11 @@ const RightPageButton = ({ router, routeParams, title, isHidden }) => (
     >
       <path
         d="M9.163,4.516c0.418,0.408,4.502,4.695,4.502,4.695C13.888,9.43,14,9.715,14,10s-0.112,0.57-0.335,0.787
-	c0,0-4.084,4.289-4.502,4.695c-0.418,0.408-1.17,0.436-1.615,0c-0.446-0.434-0.481-1.041,0-1.574L11.295,10L7.548,6.092
-	c-0.481-0.533-0.446-1.141,0-1.576C7.993,4.08,8.745,4.107,9.163,4.516z"
+        c0,0-4.084,4.289-4.502,4.695c-0.418,0.408-1.17,0.436-1.615,0c-0.446-0.434-0.481-1.041,0-1.574L11.295,10L7.548,6.092
+        c-0.481-0.533-0.446-1.141,0-1.576C7.993,4.08,8.745,4.107,9.163,4.516z"
       />
     </svg>
-  </button>
+  </FuncPageButton>
 );
 
 export default ForumPosts;
