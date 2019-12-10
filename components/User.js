@@ -13,12 +13,12 @@ const CURRENT_USER_QUERY = gql`
 `;
 
 function User(props) {
-  const apolloClient = useApolloClient();
-  const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
+  const { data, error } = useQuery(CURRENT_USER_QUERY);
   if (error && error.graphQLErrors) {
     const { message } = error.graphQLErrors[0];
+    return props.children({ error: message });
   }
-  return props.children(data);
+  return props.children({ data });
 }
 
 export default User;

@@ -10,7 +10,7 @@ function Header({ router }) {
   const client = useApolloClient();
   return (
     <User>
-      {data => {
+      {({ data, error }) => {
         const me = data ? data.whoami : null;
 
         return (
