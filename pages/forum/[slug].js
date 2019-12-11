@@ -7,8 +7,10 @@ import {
   ErrorPage,
   ForumPost,
   ForumSubcategory,
-  LoadingPage
+  LoadingPage,
+  PostEditor
 } from "../../components";
+import { useState } from "react";
 
 const fragments = {
   category: gql`
@@ -88,6 +90,8 @@ const PostContainer = ({ children }) => (
 );
 
 function ForumPosts() {
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+
   const router = useRouter();
   const { slug, page: page_str } = router.query;
   const page = parseInt(page_str || 1);
@@ -125,6 +129,20 @@ function ForumPosts() {
             </EmptyPostContaienr>
           ) : (
             <>
+              <TitleContainer>
+                <button
+                  onMouseDown={() => setIsEditorOpen(true)}
+                  className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none"
+                >
+                  <p className="font-semibold text-lg text-gray-700">
+                    Ask a question
+                  </p>
+                </button>
+                <PostEditor
+                  isEditorOpen={isEditorOpen}
+                  setIsEditorOpen={setIsEditorOpen}
+                />
+              </TitleContainer>
               <TitleContainer>
                 <p className="text-yume-red-darker text-2xl font-bold uppercase tracking-wider">
                   {name}

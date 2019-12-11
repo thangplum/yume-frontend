@@ -1,5 +1,6 @@
 export { default as App } from "./App";
 export { default as Banner } from "./Banner";
+export { default as PostEditor } from "./PostEditor";
 export { default as ErrorMessage } from "./ErrorMessage";
 export { default as ErrorPage } from "./ErrorPage";
 export { default as ForumCategory } from "./ForumCategory";
