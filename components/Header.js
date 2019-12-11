@@ -71,7 +71,6 @@ function Header({ router }) {
                   )}
                   <Link href="/forum">
                     <a
-                      href="#"
                       className={
                         "ml-8 " +
                         (router && router.pathname === "/forum"

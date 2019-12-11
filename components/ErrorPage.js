@@ -4,7 +4,7 @@ import ErrorSvg from "../icons/undraw_bug_fixing.svg";
 function ErrorPage() {
   return (
     <div className="container mx-auto ">
-      <div className="flex flex-col items-center mt-32 p-6">
+      <div className="flex flex-col items-center p-6">
         <img src={ErrorSvg} style={{ width: "600px" }} />
         <p className="mt-12 font-bold text-2xl antialiased">
           Oops. Something went wrong.

@@ -197,7 +197,11 @@ function ForumPosts() {
                           isEditorOpen={isEditorOpen}
                           setIsEditorOpen={setIsEditorOpen}
                           subcategories={subcategories}
-                          selectedCategoryId={subCategoryId}
+                          selectedCategoryId={
+                            // Important: Here if subcategory is not checked then passed will be forumCategory ID in which case
+                            // the created post will never be shown
+                            subcategory ? subCategoryId : null
+                          }
                         />
                       </>
                     );

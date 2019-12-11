@@ -151,7 +151,9 @@ function PostEditor({
   const [createPost] = useMutation(CREATE_POST);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [question, setQuestion] = useState("");
-  const [postCategory, setPostCategory] = useState(selectedCategoryId || "");
+  const [postCategory, setPostCategory] = useState(
+    subcategories && subcategories.length ? subcategories[0].id : ""
+  );
   const [error, setError] = useState(false);
 
   const currentStyle = editorState.getCurrentInlineStyle();
