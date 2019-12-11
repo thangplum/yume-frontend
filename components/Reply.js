@@ -1,4 +1,17 @@
 import React from "react";
+import { useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+import User from "./User";
+import HeartButton from "./HeartButton";
+import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
+
+const LIKE_REPLY_MUTATION = gql`
+  mutation LIKE_REPLY_MUTATION($replyId: ID!) {
+    likeReply(id: $replyId) {
+      id
+    }
+  }
+`;
 
 const ReplyContainer = ({ children }) => (
   <div className="shadow-md rounded p-4 bg-white">{children}</div>
@@ -24,26 +37,64 @@ const ReplyActions = ({ children }) => (
   </div>
 );
 
-function Reply({ comment, author, id, comments, likes }) {
+function Reply({ comment, author, id, comments, likes, numLikes, postSlug }) {
+  const [likeReply] = useMutation(LIKE_REPLY_MUTATION);
+
+  const _handleLikeClick = () => {
+    likeReply({
+      variables: {
+        replyId: id
+      },
+      // Need to refetch the posts query to get updated result in the page
+      refetchQueries: [
+        {
+          query: GET_POST_FROM_SLUG,
+          variables: {
+            slug: postSlug
+          }
+        }
+      ]
+    });
+  };
+
+  const _checkIfLiked = user => {
+    return likes && likes.filter(liker => liker.id === user.id).length;
+  };
+
   return (
-    <ReplyContainer>
-      <ReplyAuthor>
-        <p className="font-semibold text-gray-700 leading-tight">
-          {author.firstName} {author.lastName}
-        </p>
-        <p className="font-light text-gray-600 leading-tight ml-2">
-          @{author.username}
-        </p>
-      </ReplyAuthor>
-      <ReplyComment>{comment}</ReplyComment>
-      <ReplySeparator />
-      <ReplyActions>
-        <p className="text-base font-medium text-gray-800">
-          {comments.length} Comments
-        </p>
-        <p className="text-sm font-light text-gray-600">{likes} Likes</p>
-      </ReplyActions>
-    </ReplyContainer>
+    <User>
+      {({ data, error }) => {
+        const me = data ? data.whoami : null;
+        return (
+          <ReplyContainer>
+            <ReplyAuthor>
+              <p className="font-semibold text-gray-700 leading-tight">
+                {author.firstName} {author.lastName}
+              </p>
+              <p className="font-light text-gray-600 leading-tight ml-2">
+                @{author.username}
+              </p>
+            </ReplyAuthor>
+            <ReplyComment>{comment}</ReplyComment>
+            <ReplySeparator />
+            <ReplyActions>
+              <p className="text-base font-medium text-gray-800">
+                {comments.length} Comments
+              </p>
+              <div className=" flex items-center text-sm font-light text-gray-600">
+                {me && (
+                  <HeartButton
+                    isLike={_checkIfLiked(me)}
+                    handleClick={_handleLikeClick}
+                  />
+                )}
+                <p className="ml-2">{numLikes} Likes</p>
+              </div>
+            </ReplyActions>
+          </ReplyContainer>
+        );
+      }}
+    </User>
   );
 }
 

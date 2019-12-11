@@ -20,13 +20,14 @@ const fragments = {
       caption
       comment
       created
+      numLikes
       likes
     }
   `
 };
 
-const GET_POST = gql`
-  query Post($slug: String!) {
+const GET_POST_FROM_SLUG = gql`
+  query GET_POST_FROM_SLUG($slug: String!) {
     postBySlug(slug: $slug) {
       ...PostFragment
       category {
@@ -41,10 +42,12 @@ const GET_POST = gql`
         id
         comment
         likes
+        numLikes
         comments {
           id
           comment
           likes
+          numLikes
           author {
             ...UserFragment
           }
@@ -63,7 +66,7 @@ const Thread = () => {
   const router = useRouter();
   const { slug } = router.query;
 
-  const { loading, error, data } = useQuery(GET_POST, {
+  const { loading, error, data } = useQuery(GET_POST_FROM_SLUG, {
     variables: { slug }
   });
 
@@ -79,6 +82,7 @@ const Thread = () => {
     created,
     replies,
     likes,
+    numLikes,
     category,
     author
   } = data.postBySlug;
@@ -114,11 +118,14 @@ const Thread = () => {
         </div>
         <PostContainer>
           <Post
+            id={postId}
             caption={caption}
             comment={comment}
             likes={likes}
+            numLikes={numLikes}
             numReplies={replies.length}
             author={author}
+            slug={slug}
           />
         </PostContainer>
         <div className="mb-8 pl-2 antialiased">
@@ -127,11 +134,11 @@ const Thread = () => {
         <>
           {replies.map(reply => (
             <ThreadSection key={reply.id}>
-              <Reply {...reply} />
+              <Reply {...reply} postSlug={slug} />
               <CommentSection>
                 {reply.comments.map(comment => (
                   <div key={comment.id} className="max-w-2xl">
-                    <Comment {...comment} />
+                    <Comment {...comment} postSlug={slug} />
                   </div>
                 ))}
               </CommentSection>
@@ -144,3 +151,4 @@ const Thread = () => {
 };
 
 export default Thread;
+export { GET_POST_FROM_SLUG };
