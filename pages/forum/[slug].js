@@ -33,12 +33,14 @@ const fragments = {
 };
 
 const GET_CATEGORY_POSTS = gql`
-  query getPostsByCategory($slug: String!, $page: Int!, $limit: Int!) {
-    categoryBySlug(slug: $slug) {
+  query getPostsByCategory(
+    $postsFromSlug: String!
+    $page: Int!
+    $limit: Int!
+    $forumCategory: String!
+  ) {
+    categoryBySlug(slug: $postsFromSlug) {
       ...ForumPageCategory
-      children {
-        ...ForumPageCategory
-      }
       posts(page: $page, limit: $limit) {
         nodes {
           ...ForumPagePost
@@ -48,6 +50,12 @@ const GET_CATEGORY_POSTS = gql`
           }
         }
         pages
+      }
+    }
+    category(slug: $forumCategory) {
+      ...ForumPageCategory
+      children {
+        ...ForumPageCategory
       }
     }
   }
@@ -81,6 +89,21 @@ const TitleContainer = ({ children }) => (
   <div className="w-full flex justify-between pl-12">{children}</div>
 );
 
+const ForumCategoryTitle = ({
+  name,
+  forumCategory,
+  subcategory,
+  subCategoryName
+}) => (
+  <div className="flex text-yume-red text-2xl font-bold uppercase tracking-wider items-baseline">
+    <Link href="/forum/[slug]" as={`/forum/${forumCategory}`}>
+      <p className="mr-2 cursor-pointer hover:text-yume-red-darker">{name}</p>
+    </Link>
+    {subcategory && <i className="fas fa-chevron-right mr-2"></i>}
+    {subcategory && <p>{subCategoryName}</p>}
+  </div>
+);
+
 const ButtonsContainer = ({ children }) => (
   <div className="mx-10 mb-4 flex justify-end self-end">{children}</div>
 );
@@ -91,13 +114,20 @@ const PostContainer = ({ children }) => (
 
 function ForumPosts() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-
   const router = useRouter();
-  const { slug, page: page_str } = router.query;
+
+  // forumCategory: slug of one of the 4 big forum categories
+  // subcategory: slug of the subcategory
+  const { slug: forumCategory, page: page_str, subcategory } = router.query;
   const page = parseInt(page_str || 1);
 
+  // If we get a subcategory query, then get posts for just that subcategory
+  // else request all the posts for that forumCategory
+  const postsFromSlug = subcategory || forumCategory;
+  console.log("make request to", postsFromSlug);
+
   const { loading, error, data } = useQuery(GET_CATEGORY_POSTS, {
-    variables: { slug, page, limit: 10 }
+    variables: { postsFromSlug, page, limit: 10, forumCategory }
   });
 
   if (loading) {
@@ -107,22 +137,28 @@ function ForumPosts() {
     return <ErrorPage />;
   }
 
-  const { categoryBySlug: category } = data;
-  const { name, children: subcategories, posts: post_resp } = category;
+  const { categoryBySlug: postsData, category: forumCategoryData } = data;
+  const { name, children: subcategories } = forumCategoryData;
+  const { posts: post_resp, name: subCategoryName } = postsData;
   const { nodes: posts, pages } = post_resp;
 
   return (
     <div className="container mx-auto">
       <StyledContainer>
         <SubcategorySection>
-          <ForumSubcategory title={name} list={subcategories} />
+          <ForumSubcategory
+            title={name}
+            list={subcategories}
+            selected={postsFromSlug}
+            slug={forumCategory}
+          />
         </SubcategorySection>
         <MainSection>
           {!posts || posts.length === 0 ? (
             <EmptyPostContaienr>
               <p className="text-2xl">No posts to show</p>
               <Link href="/forum" replace>
-                <p class="cursor-pointer text-yume-red underline">
+                <p className="cursor-pointer text-yume-red underline">
                   Go back to Forum
                 </p>
               </Link>
@@ -144,28 +180,27 @@ function ForumPosts() {
                 />
               </TitleContainer>
               <TitleContainer>
-                <p className="text-yume-red-darker text-2xl font-bold uppercase tracking-wider">
-                  {name}
-                </p>
+                <ForumCategoryTitle
+                  name={name}
+                  forumCategory={forumCategory}
+                  subcategory={subcategory}
+                  subCategoryName={subCategoryName}
+                />
                 <ButtonsContainer>
                   <LeftPageButton
                     router={router}
                     title="Previous"
-                    routeParams={{
-                      pathname: "/forum/[slug]",
-                      as: `/forum/${slug}?page=${page - 1}`,
-                      query: { page: page - 1 }
-                    }}
+                    page={page - 1}
+                    forumCategory={forumCategory}
+                    subcategory={subcategory}
                     isHidden={page === 1}
                   />
                   <RightPageButton
                     router={router}
                     title="Next"
-                    routeParams={{
-                      pathname: "/forum/[slug]",
-                      as: `/forum/${slug}?page=${page + 1}`,
-                      query: { page: page + 1 }
-                    }}
+                    page={page + 1}
+                    forumCategory={forumCategory}
+                    subcategory={subcategory}
                     isHidden={page === pages}
                   />
                 </ButtonsContainer>
@@ -185,20 +220,33 @@ function ForumPosts() {
   );
 }
 
-const FuncPageButton = ({ router, routeParams, children, isHidden }) => (
+const FuncPageButton = ({
+  router,
+  page,
+  forumCategory,
+  subcategory,
+  children,
+  isHidden
+}) => (
   <button
     className={
-      "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg flex items-center justify-around p-2 text-yume-red-darker mr-6 outline-none" +
+      "w-24 fill-current hover:text-white hover:bg-yume-red rounded-lg flex items-center justify-around p-2 text-yume-red-darker mr-6 outline-none focus:outline-none" +
       (isHidden ? " hidden" : "")
     }
     onClick={() => {
       // Needs full query on "as" for displaying on url bar, "query" for query data
       // and pathname has to match the filename
       // Note: Throws errors if not provided all three params
-      router.push(
-        { pathname: routeParams.pathname, query: routeParams.query },
-        routeParams.as
-      );
+
+      const pathname = "/forum/[slug]";
+      const query = { page, subcategory };
+      let asPath = `/forum/${forumCategory}`;
+      if (subcategory) {
+        asPath += `?subcategory=${subcategory}`;
+      }
+      asPath += (subcategory ? `&` : "?") + `page=${page}`;
+
+      router.push({ pathname, query }, asPath);
     }}
   >
     {children}

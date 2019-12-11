@@ -19,7 +19,7 @@ Router.events.on("routeChangeError", () => {
 });
 
 export default ({ children }) => (
-  <main className="bg-gray-100">
+  <main className="min-h-screen bg-gray-100">
     <Meta />
     <Header />
     {children}
