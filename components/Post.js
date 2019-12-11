@@ -80,7 +80,6 @@ function Post({
     <User>
       {({ data, error }) => {
         const me = data ? data.whoami : null;
-        console.log(me);
         return (
           <PostContainer>
             <PostAuthor>

@@ -1,9 +1,10 @@
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
-import { Post, ErrorPage, LoadingPage, Reply } from "../../components";
+import { Post, ErrorPage, LoadingPage, Reply, User } from "../../components";
 import Comment from "../../components/Comment";
 import Link from "next/link";
+import ReplyEditor from "../../components/ReplyEditor";
 
 const fragments = {
   user: gql`
@@ -98,7 +99,7 @@ const Thread = () => {
   );
 
   const ThreadSection = ({ children }) => (
-    <div className="flex flex-col">{children}</div>
+    <div className="flex flex-col w-full">{children}</div>
   );
 
   const CommentSection = ({ children }) => (
@@ -132,6 +133,28 @@ const Thread = () => {
           <p className="font-bold text-lg tracking-wider">REPLIES</p>
         </div>
         <>
+          <User>
+            {({ data }) => {
+              const me = data ? data.whoami : null;
+              if (!me) {
+                return (
+                  <button className="w-full bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none">
+                    <Link href="/login">
+                      <p className="font-semibold text-lg text-gray-700">
+                        Login to reply to question
+                      </p>
+                    </Link>
+                  </button>
+                );
+              }
+              return (
+                <div className="reply-editor px-4 pt-6 bg-white max-w-3xl w-11/12 mb-8 border rounded-lg flex flex-col">
+                  <ReplyEditor postId={postId} postSlug={slug} />
+                </div>
+              );
+            }}
+          </User>
+
           {replies.map(reply => (
             <ThreadSection key={reply.id}>
               <Reply {...reply} postSlug={slug} />

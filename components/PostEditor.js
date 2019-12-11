@@ -230,6 +230,7 @@ function PostEditor({
   );
 }
 
+export { INLINE_STYLES };
 const INLINE_STYLES = [
   { label: "Bold", style: "BOLD", name: "bold" },
   { label: "Italic", style: "ITALIC", name: "italic" },
@@ -252,6 +253,7 @@ const InlineStyleControls = ({ toggleInlineStyle, currentStyle }) => {
   );
 };
 
+export { InlineStyleButton };
 const InlineStyleButton = ({ toggle, name, style, active }) => (
   <button
     data-style={style}
