@@ -3,6 +3,21 @@ import { EditorState, RichUtils, ContentState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import Editor from "./Editor";
 import { stateToHTML } from "draft-js-export-html";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/react-hooks";
+import { getOperationName } from "apollo-link";
+import { minLengthForQuestionCaption } from "../config";
+import { GET_CATEGORY_POSTS } from "../pages/forum/[slug]";
+
+const CREATE_POST = gql`
+  mutation CREATE_POST($caption: String!, $comment: String!, $category: ID!) {
+    createPost(caption: $caption, comment: $comment, category: $category) {
+      id
+      caption
+      comment
+    }
+  }
+`;
 
 const ModalOverlay = ({ children, isHidden }) => (
   <div
@@ -45,10 +60,22 @@ const LineSeparator = () => (
   <div className="w-full mb-4 border border-b-0 border-gray-400 "></div>
 );
 
-const CategorySelect = () => (
+const CategorySelect = ({ subcategories, postCategory, setPostCategory }) => (
   <div className="inline-block relative w-48 text-lg">
-    <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-      <option value="Careers">Careers</option>
+    <select
+      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+      value={postCategory}
+      onChange={e => {
+        e.preventDefault();
+        setPostCategory(e.target.value);
+      }}
+    >
+      {subcategories.map(subcategory => (
+        <option key={subcategory.id} value={subcategory.id}>
+          {subcategory.name}
+        </option>
+      ))}
+      {/* <option value="Careers">Careers</option> */}
     </select>
     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
       <svg
@@ -82,38 +109,85 @@ const StyledSubmitButton = ({ handleSubmit }) => (
   </button>
 );
 
-function QuestionEditor() {
+function QuestionEditor({ question, setQuestion }) {
+  const minLength = minLengthForQuestionCaption;
+  const [error, setError] = useState(false);
+  const _handleChange = e => {
+    e.preventDefault();
+    setQuestion(e.target.value);
+  };
+  const _checkValidation = e => {
+    e.preventDefault();
+    if (e.target.value.length < minLength) {
+      setError(true);
+    }
+  };
   return (
-    <div className="w-full flex mb-4">
+    <div className="w-full flex flex-col mb-4">
+      <p className={"text-yume-red text-xs " + (!error ? " hidden" : "")}>
+        Question must have a length of {minLength} letters.
+      </p>
       <textarea
-        className="w-full resize-none outline-none font-semibold text-2xl text-black leading-snug"
+        className={
+          "w-full resize-none outline-none font-semibold text-2xl text-black leading-snug " +
+          (error ? " text-yume-red underline rounded-lg" : "")
+        }
         placeholder="Ask a question"
+        value={question}
+        onChange={_handleChange}
+        onBlur={_checkValidation}
+        onFocus={() => setError(false)}
       ></textarea>
     </div>
   );
 }
 
-function PostEditor({ isEditorOpen, setIsEditorOpen }) {
+function PostEditor({
+  isEditorOpen,
+  setIsEditorOpen,
+  subcategories,
+  selectedCategoryId
+}) {
+  const [createPost] = useMutation(CREATE_POST);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [question, setQuestion] = useState("");
+  const [postCategory, setPostCategory] = useState(selectedCategoryId || "");
+  const [error, setError] = useState(false);
 
+  const currentStyle = editorState.getCurrentInlineStyle();
   const _toggleInlineStyle = evt => {
     evt.preventDefault();
     let style = evt.currentTarget.getAttribute("data-style");
     setEditorState(RichUtils.toggleInlineStyle(editorState, style));
   };
-  const currentStyle = editorState.getCurrentInlineStyle();
 
   const _handleSubmit = e => {
     e.preventDefault();
     const text = editorState.getCurrentContent().getPlainText();
     const convertedHtml = stateToHTML(editorState.getCurrentContent());
 
-    // reset editor
-    const newState = EditorState.push(
-      editorState,
-      ContentState.createFromText("")
-    );
-    setEditorState(newState);
+    if (question.length < minLengthForQuestionCaption) return;
+
+    // Note: Here in refetchQueries, since we are using "getOperationName", it will refetch the queries
+    // with the variables used to call the query previously
+    createPost({
+      variables: {
+        caption: question,
+        comment: text,
+        category: postCategory
+      },
+      refetchQueries: [getOperationName(GET_CATEGORY_POSTS)]
+    })
+      .then(data => {
+        // reset editor
+        const newState = EditorState.push(
+          editorState,
+          ContentState.createFromText("")
+        );
+        setEditorState(newState);
+        setIsEditorOpen(false);
+      })
+      .catch(e => setError(true));
   };
 
   return (
@@ -121,14 +195,21 @@ function PostEditor({ isEditorOpen, setIsEditorOpen }) {
       <ModalOverlay isHidden={!isEditorOpen}>
         <Modal>
           <ModalCloseButton setIsEditorOpen={setIsEditorOpen} />
+          {error && (
+            <p className="text-yume-red text-sm">Error creating post</p>
+          )}
           <p className="font-bold text-2xl mb-4">Create question</p>
           <LineSeparator />
           <div className="w-full mb-4 flex items-center">
             <p className="font-semibold text-lg mr-6">Ask in Category </p>
-            <CategorySelect />
+            <CategorySelect
+              postCategory={postCategory}
+              setPostCategory={setPostCategory}
+              subcategories={subcategories}
+            />
           </div>
           <LineSeparator />
-          <QuestionEditor />
+          <QuestionEditor question={question} setQuestion={setQuestion} />
           <StyledCommentEditor>
             <Editor
               editorState={editorState}

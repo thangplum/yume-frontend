@@ -17,3 +17,4 @@ export { default as PostUpvoter } from "./PostUpvoter";
 export { default as Reply } from "./Reply";
 export { default as Spinner } from "./Spinner";
 export { default as Submit } from "./Submit";
+export { default as User } from "./User";

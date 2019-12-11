@@ -2,13 +2,13 @@ import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import gql from "graphql-tag";
-
 import {
   ErrorPage,
   ForumPost,
   ForumSubcategory,
   LoadingPage,
-  PostEditor
+  PostEditor,
+  User
 } from "../../components";
 import { useState } from "react";
 
@@ -124,7 +124,6 @@ function ForumPosts() {
   // If we get a subcategory query, then get posts for just that subcategory
   // else request all the posts for that forumCategory
   const postsFromSlug = subcategory || forumCategory;
-  console.log("make request to", postsFromSlug);
 
   const { loading, error, data } = useQuery(GET_CATEGORY_POSTS, {
     variables: { postsFromSlug, page, limit: 10, forumCategory }
@@ -139,7 +138,11 @@ function ForumPosts() {
 
   const { categoryBySlug: postsData, category: forumCategoryData } = data;
   const { name, children: subcategories } = forumCategoryData;
-  const { posts: post_resp, name: subCategoryName } = postsData;
+  const {
+    posts: post_resp,
+    name: subCategoryName,
+    id: subCategoryId
+  } = postsData;
   const { nodes: posts, pages } = post_resp;
 
   return (
@@ -166,18 +169,40 @@ function ForumPosts() {
           ) : (
             <>
               <TitleContainer>
-                <button
-                  onMouseDown={() => setIsEditorOpen(true)}
-                  className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none"
-                >
-                  <p className="font-semibold text-lg text-gray-700">
-                    Ask a question
-                  </p>
-                </button>
-                <PostEditor
-                  isEditorOpen={isEditorOpen}
-                  setIsEditorOpen={setIsEditorOpen}
-                />
+                <User>
+                  {({ data, error }) => {
+                    const me = data ? data.whoami : null;
+                    if (!me)
+                      return (
+                        <button className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none">
+                          <Link href="/login">
+                            <p className="font-semibold text-lg text-gray-700">
+                              Login to ask a question
+                            </p>
+                          </Link>
+                        </button>
+                      );
+                    return (
+                      <>
+                        <button
+                          onMouseDown={() => setIsEditorOpen(true)}
+                          className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none"
+                        >
+                          <p className="font-semibold text-lg text-gray-700">
+                            Ask a question
+                          </p>
+                        </button>
+
+                        <PostEditor
+                          isEditorOpen={isEditorOpen}
+                          setIsEditorOpen={setIsEditorOpen}
+                          subcategories={subcategories}
+                          selectedCategoryId={subCategoryId}
+                        />
+                      </>
+                    );
+                  }}
+                </User>
               </TitleContainer>
               <TitleContainer>
                 <ForumCategoryTitle
@@ -292,3 +317,4 @@ const RightPageButton = props => (
 );
 
 export default ForumPosts;
+export { GET_CATEGORY_POSTS };
