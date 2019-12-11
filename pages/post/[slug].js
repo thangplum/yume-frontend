@@ -5,6 +5,7 @@ import { Post, ErrorPage, LoadingPage, Reply, User } from "../../components";
 import Comment from "../../components/Comment";
 import Link from "next/link";
 import ReplyEditor from "../../components/ReplyEditor";
+import CommentEditor from "../../components/CommentEditor";
 
 const fragments = {
   user: gql`
@@ -155,7 +156,7 @@ const Thread = () => {
             }}
           </User>
 
-          {replies.map(reply => (
+          {replies.map((reply, replyIndex) => (
             <ThreadSection key={reply.id}>
               <Reply {...reply} postSlug={slug} />
               <CommentSection>
@@ -164,6 +165,28 @@ const Thread = () => {
                     <Comment {...comment} postSlug={slug} />
                   </div>
                 ))}
+                <div className="w-6/12 mb-4">
+                  <User>
+                    {({ data, error }) => {
+                      const me = data ? data.whoami : null;
+                      if (!me && replyIndex === 0) {
+                        return (
+                          <button className="w-full bg-gray-200 hover:bg-gray-300  rounded px-6 py-1 mb-6 cursor-pointer outline-none focus:outline-none">
+                            <Link href="/login">
+                              <p className="font-semibold text-xs text-gray-700">
+                                Login to leave a comment
+                              </p>
+                            </Link>
+                          </button>
+                        );
+                      }
+                      if (!me) return null;
+                      return (
+                        <CommentEditor replyId={reply.id} postSlug={slug} />
+                      );
+                    }}
+                  </User>
+                </div>
               </CommentSection>
             </ThreadSection>
           ))}
