@@ -4,7 +4,7 @@ import { withRouter } from "next/router";
 import YumeLogo from "../icons/logo.svg";
 import User from "./User";
 import { useApolloClient } from "@apollo/react-hooks";
-import { signout } from "../lib/checkLoggedIn";
+import { logout } from "../lib/auth";
 
 function Header({ router }) {
   const client = useApolloClient();
@@ -12,7 +12,6 @@ function Header({ router }) {
     <User>
       {({ data, error }) => {
         const me = data ? data.whoami : null;
-
         return (
           <div className="bg-white">
             <header className="container mx-auto">
@@ -38,7 +37,6 @@ function Header({ router }) {
                 <div className="mr-6 font-medium flex flex-row items-center">
                   <Link href="/about">
                     <a
-                      href="#"
                       className={
                         "ml-8 " +
                         (router && router.pathname === "/about"
@@ -49,11 +47,13 @@ function Header({ router }) {
                       About
                     </a>
                   </Link>
-                  {me && (
-                    <button className="ml-8" onClick={() => signout(client)}>
-                      Sign Out
-                    </button>
-                  )}
+                  <div>
+                    {me && (
+                      <button className="ml-8" onClick={() => logout(client)}>
+                        Sign Out
+                      </button>
+                    )}
+                  </div>
                   {!me && (
                     <Link href="/login">
                       <a
@@ -81,7 +81,7 @@ function Header({ router }) {
                       Forum
                     </a>
                   </Link>
-                  <a href="#" className="ml-8">
+                  <a className="ml-8">
                     <svg
                       className="w-5 h-5 m-auto fill-current text-yume-red"
                       xmlns="http://www.w3.org/2000/svg"

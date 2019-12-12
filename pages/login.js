@@ -4,6 +4,7 @@ import { useState } from "react";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
 import LoginForm from "../components/LoginForm";
+import { login } from "../lib/auth";
 
 function Login() {
   const client = useApolloClient();
@@ -19,18 +20,18 @@ function Login() {
     return { error, showError };
   };
 
-  const afterLogin = token => {
-    // Store the token in cookie
-    document.cookie = cookie.serialize("token", token, {
-      sameSite: true,
-      path: "/",
-      maxAge: 1 * 24 * 60 * 60 // 1 day
-    });
-    // Force a reload of all the current queries now that the user is logged in
-    client.resetStore().then(() => {
-      redirect({}, "/");
-    });
-  };
+  // const afterLogin = token => {
+  //   // Store the token in cookie
+  //   document.cookie = cookie.serialize("token", token, {
+  //     sameSite: true,
+  //     path: "/",
+  //     maxAge: 1 * 24 * 60 * 60 // 1 day
+  //   });
+  //   // Force a reload of all the current queries now that the user is logged in
+  //   client.resetStore().then(() => {
+  //     redirect({}, "/");
+  //   });
+  // };
 
   const handleLogin = async (email, password) => {
     const API_URL = `http://localhost:4000/api/v1`;
@@ -50,8 +51,8 @@ function Login() {
       if (response.status >= 400 && response.status < 600) {
         throw new Error("Invalid email and password");
       }
-      const login = await response.json();
-      afterLogin(login.access_token);
+      const loginResp = await response.json();
+      login({ token: loginResp.access_token, client });
     } catch (e) {
       showError(e.message);
     }
