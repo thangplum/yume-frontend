@@ -5,6 +5,7 @@ import HumanLabCoat from "../icons/yume_human_blue_lab_coat.svg";
 import HumanYellowTwo from "../icons/yume_human_yellow_two.svg";
 import YumeHomeDemo from "../icons/yume_home_demo.svg";
 import Header from "./Header";
+import '../style.css';
 
 const IndexPage = () => (
   <div>

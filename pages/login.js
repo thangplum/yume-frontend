@@ -5,6 +5,7 @@ import redirect from "../lib/redirect";
 
 import { withApollo } from "../lib/apollo";
 import LoginForm from "../components/LoginForm";
+import RegisForm from "../components/RegisForm";
 import { useState } from "react";
 
 function Login() {
