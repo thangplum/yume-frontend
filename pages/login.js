@@ -60,7 +60,7 @@ function Login() {
   };
 
   return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="flex h-full mt-24 justify-center items-center">
       <LoginForm
         handleLogin={handleLogin}
         error={error}

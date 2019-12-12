@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as validator from "validator";
 import ErrorMessage from "../components/ErrorMessage";
 import Spinner from "../components/Spinner";
+import Link from "next/link";
 
 const useInput = initialValue => {
   const [value, setValue] = useState(initialValue);
@@ -43,11 +44,14 @@ function LoginForm(props) {
   };
   return (
     <div className="w-full max-w-sm">
+      <p className="text-yume-red text-2xl tracking-wider font-semibold uppercase mb-6">
+        Login
+      </p>
       <div className="relative">
         {props.loading && <Spinner />}
         <form
           onSubmit={handleSubmit}
-          className="bg-yume-light shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-4 mb-4"
         >
           <p className="text-yume-red">
             {props.error && <ErrorMessage message={props.error} />}
@@ -61,7 +65,7 @@ function LoginForm(props) {
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-yume-text leading-tight focus:outline-none focus:shadow-outline"
+              className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-yume-blue-dark"
               id="email"
               type="text"
               placeholder="Email"
@@ -76,7 +80,7 @@ function LoginForm(props) {
               Password
             </label>
             <input
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-yume-text mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-yume-blue-dark"
               id="password"
               type="password"
               placeholder="******************"
@@ -94,11 +98,19 @@ function LoginForm(props) {
               Sign In
             </button>
             <a
-              className="inline-block align-baseline font-bold text-sm text-yume-blue hover:text-yume-blue-dark"
+              className="inline-block align-baseline font-bold text-sm text-yume-red hover:text-yume-red-darker"
               href="#"
             >
               Forgot Password?
             </a>
+          </div>
+          <div className="w-full flex items-center justify-center">
+            <p className="text-gray-600 text-sm mt-6">
+              Not a member yet?
+              <Link href="/register">
+                <a className="underline cursor-pointer ml-2">Join Now</a>
+              </Link>
+            </p>
           </div>
         </form>
       </div>
