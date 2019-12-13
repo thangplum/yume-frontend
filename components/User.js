@@ -9,7 +9,6 @@ const CURRENT_USER_QUERY = gql`
       username
       firstName
       lastName
-      email
     }
   }
 `;
