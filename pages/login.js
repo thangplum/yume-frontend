@@ -5,6 +5,7 @@ import cookie from "cookie";
 import redirect from "../lib/redirect";
 import LoginForm from "../components/LoginForm";
 import { login } from "../lib/auth";
+import { apiUrl } from "../config";
 
 function Login() {
   const client = useApolloClient();
@@ -34,10 +35,9 @@ function Login() {
   // };
 
   const handleLogin = async (email, password) => {
-    const API_URL = `http://localhost:4000/api/v1`;
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json"

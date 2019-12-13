@@ -7,6 +7,7 @@ import Link from "next/link";
 import ErrorMessage from "./ErrorMessage";
 import { loginWithoutRedirect } from "../lib/auth";
 import { useApolloClient } from "@apollo/react-hooks";
+import { apiUrl } from "../config";
 
 const InputItem = props => (
   <div className="mb-3">
@@ -70,10 +71,9 @@ function RegisterForm(props) {
   });
 
   const _handleSubmit = async values => {
-    const API_URL = `http://localhost:4000/api/v1`;
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json"
