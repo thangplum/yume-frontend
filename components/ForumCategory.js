@@ -1,16 +1,28 @@
 import React from "react";
 import Link from "next/link";
 
-function ForumCategory({ name, number, slug }) {
+function ForumCategory({
+  name,
+  number,
+  slug,
+  categoryIconForSlug,
+  categoryTextForSlug
+}) {
   return (
-    <div className="max-w-sm w-full p-3 flex flex-col bg-white border rounded shadow-md">
-      <Link href="/forum/[slug]" as={"/forum/" + slug}>
-        <a className="w-full py-10 text-center font-bold text-4xl cursor-pointer hover:text-yume-red">
-          {name}
-        </a>
-      </Link>
-      <div className="w-full border border-b-0 border-gray-400"></div>
-      <div className="py-4 text-center text-gray-600">
+    <div className="max-w-4xl w-full p-3 py-4 flex flex bg-white border rounded shadow-md">
+      <img className="w-40" src={categoryIconForSlug[slug] || ""} />
+      <div className="flex flex-col ml-6 items-start justify-around">
+        <Link href="/forum/[slug]" as={"/forum/" + slug}>
+          <a className="text-center font-bold text-2xl cursor-pointer hover:text-yume-red">
+            {name}
+          </a>
+        </Link>
+        <p className="text-sm text-gray-700">
+          {categoryTextForSlug[slug] || ""}
+        </p>
+      </div>
+      <div className="w-0 border border-l-0 mx-4 border-gray-400"></div>
+      <div className="py-4 text-center text-gray-600 flex items-center">
         {number} subcategories
       </div>
     </div>

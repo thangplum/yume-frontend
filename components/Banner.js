@@ -4,7 +4,7 @@ function Banner({ title, subtitle }) {
   if (!subtitle) {
     return (
       <div className="w-full bg-yume-red flex flex-col items-center text-white p-4">
-        <div className="px-6 py-8  text-5xl">{title}</div>
+        <div className="px-6 py-3  text-4xl">{title}</div>
       </div>
     );
   }
