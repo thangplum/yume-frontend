@@ -73,7 +73,7 @@ function Post({
   };
 
   const _checkIfLiked = user => {
-    return likes && likes.filter(liker => liker.id === user.id).length;
+    return likes && likes.filter(liker => liker === user.id)[0];
   };
 
   return (

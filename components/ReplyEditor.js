@@ -26,7 +26,7 @@ const StyledReplyEditor = ({ children }) => (
     {children}
     <style jsx>{`
       .editor {
-        height: 160px;
+        height: 120px;
       }
     `}</style>
   </div>

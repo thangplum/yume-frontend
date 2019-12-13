@@ -25,12 +25,25 @@ function Header({ router }) {
               <div className="hidden sm:flex flex-row justify-between py-8 mx-12 items-center">
                 <div className="ml-6">
                   <Link href="/">
-                    <a className="mr-3 text-center font-bold text-xl inline-block cursor-pointer hover:text-black">
+                    <a className="flex mr-3 text-center font-black  text-xl inline-block cursor-pointer items-center hover:text-black">
                       <img
-                        className="w-6 h-6 inline-block mr-2"
+                        className={
+                          "w-6 h-6 inline-block " +
+                          (router && router.pathname === "/"
+                            ? "mr-4  w-10 h-10"
+                            : " mr-2")
+                        }
                         src={YumeLogo}
                       />
-                      <span>y</span>u<span>m</span>e
+                      <p
+                        className={
+                          router && router.pathname === "/"
+                            ? "text-2xl"
+                            : "text-xl"
+                        }
+                      >
+                        yume
+                      </p>
                     </a>
                   </Link>
                 </div>

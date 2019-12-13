@@ -58,7 +58,7 @@ function Reply({ comment, author, id, comments, likes, numLikes, postSlug }) {
   };
 
   const _checkIfLiked = user => {
-    return likes && likes.filter(liker => liker.id === user.id).length;
+    return likes && likes.filter(liker => liker === user.id).length;
   };
 
   return (

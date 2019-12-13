@@ -6,6 +6,7 @@ import HumanYellowTwo from "../icons/yume_human_yellow_two.svg";
 import ForumDisplayImage from "../icons/forum_display.svg";
 import ProfileDisplayImage from "../icons/profile_display.svg";
 import ThreadDisplayImage from "../icons/thread_display.svg";
+import Strings from "../strings";
 
 const Buttons = ({ selected, select }) => (
   <div>
@@ -235,15 +236,21 @@ function IndexPage() {
             style={{ width: "600px", top: "6rem", right: "30px" }}
           />
           <p className="text-5xl font-semibold antialiased">
-            We help <br /> college students network
+            {Strings.home.welcome.heading.first}
+            <br /> {Strings.home.welcome.heading.second}
           </p>
           <p className="tracking-wide text-sm border-l-4 border-gray-700 pl-2 text-gray-700 mt-4 leading-loose">
-            With our diverse team we are building the best resource for college
-            students <br /> to network with each other
+            {Strings.home.welcome.subheading.first}
+            <br /> {Strings.home.welcome.subheading.second}
           </p>
-          <Link href="/login">
-            <button className="mt-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-blue">
-              Join Now
+          <Link href="/forum" prefetch>
+            <button className="mt-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-red-darker">
+              Go To Forum
+            </button>
+          </Link>
+          <Link href="/register" prefetch>
+            <button className="ml-6 mt-8 bg-white text-yume-red font-semibold py-2 px-6 rounded-full focus:outline-none border-2 border-white hover:border-yume-red-darker ">
+              {Strings.home.welcome.topButton.text}
             </button>
           </Link>
         </div>
@@ -302,7 +309,7 @@ const TwoPieceHumans = () => (
         <p className="font-semibold mt-2">Topics</p>
         <p className="font-thin text-gray-700 mt-2">
           Yume is a collection of thousands of resource of universities in the
-          US
+          U.S.
         </p>
       </div>
     </div>
@@ -313,11 +320,11 @@ const BigDemoHero = () => (
   <div className="container mx-auto flex flex-col items-center p-6">
     <div className="flex flex-col items-center mt-16 justify-center tracking-wider">
       <p className="font-bold text-3xl max-w-xl">
-        Browse through your customized feed, forums and user profiles
+        Browse through the forums, ask and answer questions
       </p>
       <Link href="/forum">
-        <button className="my-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-blue">
-          Goto Forums
+        <button className="my-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-red-darker">
+          Go To Forum
         </button>
       </Link>
     </div>

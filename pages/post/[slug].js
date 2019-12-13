@@ -6,6 +6,7 @@ import Comment from "../../components/Comment";
 import Link from "next/link";
 import ReplyEditor from "../../components/ReplyEditor";
 import CommentEditor from "../../components/CommentEditor";
+import { useState } from "react";
 
 const fragments = {
   user: gql`
@@ -100,14 +101,34 @@ const Thread = () => {
   );
 
   const ThreadSection = ({ children }) => (
-    <div className="flex flex-col w-full">{children}</div>
+    <div className="flex flex-col w-full mb-4">{children}</div>
   );
 
-  const CommentSection = ({ children }) => (
-    <div className="w-full flex flex-col mt-2 items-end justify-end">
-      {children}
-    </div>
-  );
+  const CommentSection = ({ children }) => {
+    const [visible, setVisible] = useState(false);
+    if (!visible)
+      return (
+        <button
+          className="max-w-md bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 ml-1 mt-1 mb-6 cursor-pointer outline-none focus:outline-none text-sm tracking-wide font-medium text-gray-600"
+          onClick={() => setVisible(true)}
+        >
+          Show the comments
+        </button>
+      );
+    return (
+      <>
+        <button
+          className="max-w-md bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 ml-1 mt-1 mb-2 cursor-pointer outline-none focus:outline-none text-sm tracking-wide font-medium text-gray-600"
+          onClick={() => setVisible(false)}
+        >
+          Hide the comments
+        </button>
+        <div className="w-full flex flex-col mt-2 items-start justify-end animated pulse faster">
+          {children}
+        </div>
+      </>
+    );
+  };
   return (
     <div className="container mx-auto">
       <MainSection>
