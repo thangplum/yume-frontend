@@ -14,7 +14,7 @@ const LIKE_POST_MUTATION = gql`
 `;
 
 const PostContainer = ({ children }) => (
-  <div className="rounded-lg bg-white shadow-lg p-4">{children}</div>
+  <div className="rounded-lg bg-white shadow-lg p-3">{children}</div>
 );
 
 const PostAuthor = ({ children }) => (
@@ -22,13 +22,13 @@ const PostAuthor = ({ children }) => (
 );
 
 const PostCaption = ({ children }) => (
-  <div className="px-4 py-2 text-2xl font-semibold leading-tight">
+  <div className="px-4 py-2 text-xl font-semibold leading-tight">
     {children}
   </div>
 );
 
 const PostComment = ({ children }) => (
-  <div className="w-full px-4 py-2 mb-2 text-lg leading-snug text-gray-800 ">
+  <div className="w-full px-4 py-2 mb-2 text-md leading-snug text-gray-800 ">
     {children}
   </div>
 );
@@ -38,7 +38,7 @@ const PostSeparator = () => (
 );
 
 const PostActions = ({ children }) => (
-  <div className="w-full mt-2 px-4 py-2 flex flex-row justify-between items-center">
+  <div className="w-full mt-2 px-4 py-1 flex flex-row justify-between items-center">
     {children}
   </div>
 );

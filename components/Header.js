@@ -22,7 +22,7 @@ function Header({ router }) {
                 </a>
               </div>
               {/* Header for small and anything bigger */}
-              <div className="hidden sm:flex flex-row justify-between py-8 mx-12 items-center">
+              <div className="hidden sm:flex flex-row justify-between py-5 mx-12 items-center">
                 <div className="ml-6">
                   <Link href="/">
                     <a className="flex mr-3 text-center font-black  text-xl inline-block cursor-pointer items-center hover:text-black">

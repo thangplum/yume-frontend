@@ -104,9 +104,9 @@ const Thread = () => {
     <div className="flex flex-col w-full mb-4">{children}</div>
   );
 
-  const CommentSection = ({ children }) => {
+  const CommentSection = props => {
     const [visible, setVisible] = useState(false);
-    if (!visible)
+    if (!visible && props.size)
       return (
         <button
           className="max-w-md bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 ml-1 mt-1 mb-6 cursor-pointer outline-none focus:outline-none text-sm tracking-wide font-medium text-gray-600"
@@ -124,7 +124,7 @@ const Thread = () => {
           Hide the comments
         </button>
         <div className="w-full flex flex-col mt-2 items-start justify-end animated pulse faster">
-          {children}
+          {props.children}
         </div>
       </>
     );
@@ -160,9 +160,9 @@ const Thread = () => {
               const me = data ? data.whoami : null;
               if (!me) {
                 return (
-                  <button className="w-full bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none">
+                  <button className="w-full bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 mb-6 cursor-pointer outline-none focus:outline-none">
                     <Link href="/login">
-                      <p className="font-semibold text-lg text-gray-700">
+                      <p className="font-semibold text-md text-gray-700">
                         Login to reply to question
                       </p>
                     </Link>
@@ -180,7 +180,7 @@ const Thread = () => {
           {replies.map((reply, replyIndex) => (
             <ThreadSection key={reply.id}>
               <Reply {...reply} postSlug={slug} />
-              <CommentSection>
+              <CommentSection size={reply.comments.length}>
                 {reply.comments.map(comment => (
                   <div key={comment.id} className="max-w-2xl">
                     <Comment {...comment} postSlug={slug} />

@@ -68,13 +68,13 @@ const StyledContainer = ({ children }) => (
 );
 
 const SubcategorySection = ({ children }) => (
-  <div className="w-3/12 hidden lg:block ml-12 mt-12 flex flex-col items-center">
+  <div className="w-2/12 hidden lg:block ml-12 mt-24 flex flex-col items-center">
     {children}
   </div>
 );
 
 const MainSection = ({ children }) => (
-  <div className="w-full lg:w-9/12 flex flex-col lg:items-center mt-6">
+  <div className="w-full lg:w-9/12 flex flex-col lg:items-center mt-4">
     {children}
   </div>
 );
@@ -95,21 +95,34 @@ const ForumCategoryTitle = ({
   subcategory,
   subCategoryName
 }) => (
-  <div className="flex text-yume-red text-2xl font-bold uppercase tracking-wider items-baseline">
+  <div className="flex text-gray-800 text-lg font-bold uppercase tracking-wider items-baseline">
     <Link href="/forum/[slug]" as={`/forum/${forumCategory}`}>
       <p className="mr-2 cursor-pointer hover:text-yume-red-darker">{name}</p>
     </Link>
     {subcategory && <i className="fas fa-chevron-right mr-2"></i>}
-    {subcategory && <p>{subCategoryName}</p>}
+    {subcategory && <p className="text-yume-red ">{subCategoryName}</p>}
   </div>
 );
 
+const AskButton = props => (
+  <button
+    className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 mb-6 cursor-pointer outline-none focus:outline-none"
+    onMouseDown={props.onMouseDown}
+  >
+    {props.children}
+  </button>
+);
+
 const ButtonsContainer = ({ children }) => (
-  <div className="mx-10 mb-4 flex justify-end self-end">{children}</div>
+  <div className="mx-10 mb-1 flex justify-end self-end">{children}</div>
 );
 
 const PostContainer = ({ children }) => (
   <div className="max-w-4xl mb-6 p-2 lg:w-11/12">{children}</div>
+);
+
+const BottomContainer = ({ children }) => (
+  <div className="w-full flex justify-end pl-12 mb-8">{children}</div>
 );
 
 function ForumPosts() {
@@ -172,26 +185,24 @@ function ForumPosts() {
                 <User>
                   {({ data, error }) => {
                     const me = data ? data.whoami : null;
+
                     if (!me)
                       return (
-                        <button className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none">
+                        <AskButton>
                           <Link href="/login">
-                            <p className="font-semibold text-lg text-gray-700">
+                            <p className="font-semibold text-md text-gray-700">
                               Login to ask a question
                             </p>
                           </Link>
-                        </button>
+                        </AskButton>
                       );
                     return (
                       <>
-                        <button
-                          onMouseDown={() => setIsEditorOpen(true)}
-                          className="w-11/12 bg-gray-200 hover:bg-gray-300  rounded px-6 py-4 mb-6 cursor-pointer outline-none focus:outline-none"
-                        >
-                          <p className="font-semibold text-lg text-gray-700">
+                        <AskButton onMouseDown={() => setIsEditorOpen(true)}>
+                          <p className="font-semibold text-md text-gray-700">
                             Ask a question
                           </p>
-                        </button>
+                        </AskButton>
 
                         <PostEditor
                           isEditorOpen={isEditorOpen}
@@ -241,6 +252,26 @@ function ForumPosts() {
                   </PostContainer>
                 ))}
               </>
+              <BottomContainer>
+                <ButtonsContainer>
+                  <LeftPageButton
+                    router={router}
+                    title="Previous"
+                    page={page - 1}
+                    forumCategory={forumCategory}
+                    subcategory={subcategory}
+                    isHidden={page === 1}
+                  />
+                  <RightPageButton
+                    router={router}
+                    title="Next"
+                    page={page + 1}
+                    forumCategory={forumCategory}
+                    subcategory={subcategory}
+                    isHidden={page === pages}
+                  />
+                </ButtonsContainer>
+              </BottomContainer>
             </>
           )}
         </MainSection>

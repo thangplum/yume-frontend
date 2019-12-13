@@ -14,15 +14,15 @@ const LIKE_REPLY_MUTATION = gql`
 `;
 
 const ReplyContainer = ({ children }) => (
-  <div className="shadow-md rounded p-4 bg-white">{children}</div>
+  <div className="shadow-md rounded p-3 bg-white">{children}</div>
 );
 
 const ReplyAuthor = ({ children }) => (
-  <div className="px-4 flex flex-row items-center">{children}</div>
+  <div className="px-3 flex flex-row items-center">{children}</div>
 );
 
 const ReplyComment = ({ children }) => (
-  <div className="w-full px-4 py-2 mb-2 text-base leading-snug text-gray-800">
+  <div className="w-full px-3 py-2 mb-2 text-base leading-snug text-gray-800">
     {children}
   </div>
 );
@@ -32,7 +32,7 @@ const ReplySeparator = () => (
 );
 
 const ReplyActions = ({ children }) => (
-  <div className="w-full mt-2 px-4 py-2 flex flex-row justify-between">
+  <div className="w-full mt-2 px-4 py-1 flex flex-row justify-between">
     {children}
   </div>
 );
