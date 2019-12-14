@@ -106,6 +106,9 @@ const Thread = () => {
 
   const CommentSection = props => {
     const [visible, setVisible] = useState(false);
+    if (!props.size) {
+      return null;
+    }
     if (!visible && props.size)
       return (
         <button
