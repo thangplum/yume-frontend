@@ -6,9 +6,15 @@ import User from "./User";
 import { useApolloClient } from "@apollo/react-hooks";
 import { logout } from "../lib/auth";
 import { SearchBox } from ".";
+import { useState } from "react";
 
 function Header({ router }) {
   const client = useApolloClient();
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  router.events.on("routeChangeStart", () => {
+    setAccountOpen(false);
+  });
   return (
     <User>
       {({ data, error }) => {
@@ -68,9 +74,34 @@ function Header({ router }) {
                   </Link> */}
                   <div>
                     {me && (
-                      <button className="ml-8" onClick={() => logout(client)}>
-                        Sign Out
-                      </button>
+                      <div className="relative pl-4">
+                        <button
+                          onMouseDown={e => {
+                            e.preventDefault();
+                            setAccountOpen(!accountOpen);
+                          }}
+                        >
+                          <span className="mr-1">Account</span>
+                          <i className="fas fa-angle-down"></i>
+                        </button>
+                        <ul
+                          className={
+                            (!accountOpen ? "hidden " : "") +
+                            " z-50 absolute top-0 left-0 mt-8 bg-white border shadow-md py-2 rounded-lg flex flex-col items-start text-gray-700"
+                          }
+                        >
+                          <Link href="/settings">
+                            <a className="px-4 mb-2">Settings</a>
+                          </Link>
+
+                          {/* <li className="w-full h-0 border border-gray-400 mb-1"></li> */}
+                          <li className="px-4">
+                            <button onClick={() => logout(client)}>
+                              Logout
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     )}
                   </div>
                   {!me && (

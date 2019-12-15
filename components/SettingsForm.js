@@ -4,6 +4,8 @@ import { object as yupObject, string } from "yup";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { CURRENT_USER_QUERY } from "../components/User";
+import Spinner from "./Spinner";
+import { useState } from "react";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION($firstName: String!, $lastName: String!) {
@@ -43,11 +45,13 @@ const SettingsItem = props => (
 
 function SettingsForm({ user }) {
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { firstName, lastName, username } = user;
   const formik = useFormik({
     initialValues: { username, firstName, lastName },
     onSubmit: async (values, { setSubmitting }) => {
+      setIsLoading(true);
       try {
         const data = await updateUser({
           variables: {
@@ -60,8 +64,13 @@ function SettingsForm({ user }) {
             }
           ]
         });
-        setSubmitting(false);
+        setTimeout(() => {
+          setSubmitting(false);
+          setIsLoading(false);
+        }, 2000);
       } catch (err) {
+        setIsLoading(false);
+
         console.error(err);
       }
     },
@@ -71,47 +80,49 @@ function SettingsForm({ user }) {
         .required("Required"),
       lastName: string()
         .max(15, "Must be 15 characters or less")
-        .required("Required"),
-      username: string()
-        .min(6, "Must be atleast 6 characters")
-        .max(15, "Must be 15 characters or less")
         .required("Required")
+      // username: string()
+      //   .min(6, "Must be atleast 6 characters")
+      //   .max(15, "Must be 15 characters or less")
+      //   .required("Required")
     })
   });
   return (
-    <div>
-      {user.firstName} {user.lastName}
-      <div className="container mx-auto flex flex-col justify-center items-center mt-16">
-        <p className="block text-gray-700 font-bold text-xl mb-6">Settings</p>
+    <>
+      {isLoading && <Spinner />}
+      <div>
+        {/* {user.firstName} {user.lastName} */}
+        <div className=" container mx-auto flex flex-col justify-center items-center mt-16">
+          <p className="block text-gray-700 font-bold text-xl mb-6">Settings</p>
 
-        <form className="w-full max-w-sm" onSubmit={formik.handleSubmit}>
-          <SettingsItem
-            label="First Name"
-            type="text"
-            name="firstName"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.firstName}
-            errors={
-              formik.errors.firstName &&
-              formik.touched.firstName &&
-              formik.errors.firstName
-            }
-          />
-          <SettingsItem
-            label="Last Name"
-            type="text"
-            name="lastName"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.lastName}
-            errors={
-              formik.errors.lastName &&
-              formik.touched.lastName &&
-              formik.errors.lastName
-            }
-          />
-          <SettingsItem
+          <form className="w-full max-w-sm" onSubmit={formik.handleSubmit}>
+            <SettingsItem
+              label="First Name"
+              type="text"
+              name="firstName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.firstName}
+              errors={
+                formik.errors.firstName &&
+                formik.touched.firstName &&
+                formik.errors.firstName
+              }
+            />
+            <SettingsItem
+              label="Last Name"
+              type="text"
+              name="lastName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.lastName}
+              errors={
+                formik.errors.lastName &&
+                formik.touched.lastName &&
+                formik.errors.lastName
+              }
+            />
+            {/* <SettingsItem
             label="Username"
             type="text"
             name="username"
@@ -123,22 +134,23 @@ function SettingsForm({ user }) {
               formik.touched.username &&
               formik.errors.username
             }
-          />
-          <div className="md:flex md:items-center">
-            <div className="md:w-1/3"></div>
-            <div className="md:w-2/3 text-white font-bold ">
-              <button
-                type="submit"
-                disabled={!formik.isValid || formik.isSubmitting}
-                className=" bg-yume-red hover:bg-yume-red-darker  focus:outline-none py-2 px-4 rounded outline-none"
-              >
-                Update Settings
-              </button>
+          /> */}
+            <div className="md:flex md:items-center">
+              <div className="md:w-1/3"></div>
+              <div className="md:w-2/3 text-white font-bold ">
+                <button
+                  type="submit"
+                  disabled={!formik.isValid || formik.isSubmitting}
+                  className=" bg-yume-red hover:bg-yume-red-darker  focus:outline-none py-2 px-4 rounded outline-none"
+                >
+                  Update Settings
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

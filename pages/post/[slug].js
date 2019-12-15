@@ -107,16 +107,22 @@ const Thread = () => {
   const CommentSection = props => {
     const [visible, setVisible] = useState(false);
     if (!props.size) {
-      return null;
+      return (
+        <div className="w-full flex flex-col mt-2 items-start justify-end animated pulse faster">
+          {props.children}
+        </div>
+      );
     }
     if (!visible && props.size)
       return (
-        <button
-          className="max-w-md bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 ml-1 mt-1 mb-6 cursor-pointer outline-none focus:outline-none text-sm tracking-wide font-medium text-gray-600"
-          onClick={() => setVisible(true)}
-        >
-          Show the comments
-        </button>
+        <>
+          <button
+            className="max-w-md bg-gray-200 hover:bg-gray-300  rounded px-6 py-2 ml-1 mt-1 mb-6 cursor-pointer outline-none focus:outline-none text-sm tracking-wide font-medium text-gray-600"
+            onClick={() => setVisible(true)}
+          >
+            Show the comments
+          </button>
+        </>
       );
     return (
       <>

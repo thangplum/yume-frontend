@@ -243,12 +243,12 @@ function IndexPage() {
             {Strings.home.welcome.subheading.first}
             <br /> {Strings.home.welcome.subheading.second}
           </p>
-          <Link href="/forum" prefetch>
+          <Link href="/forum">
             <button className="mt-8 bg-yume-red text-white font-semibold py-2 px-6 rounded-full focus:outline-none hover:bg-yume-red-darker">
               Go To Forum
             </button>
           </Link>
-          <Link href="/register" prefetch>
+          <Link href="/register">
             <button className="ml-6 mt-8 bg-white text-yume-red font-semibold py-2 px-6 rounded-full focus:outline-none border-2 border-white hover:border-yume-red-darker ">
               {Strings.home.welcome.topButton.text}
             </button>
