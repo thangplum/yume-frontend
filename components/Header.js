@@ -35,7 +35,7 @@ function Header({ router }) {
                     <a className="flex mr-3 text-center font-black  text-xl inline-block cursor-pointer items-center hover:text-black">
                       <img
                         className={
-                          "w-6 h-6 inline-block " +
+                          "w-8 h-8 inline-block " +
                           (router && router.pathname === "/"
                             ? "mr-4  w-10 h-10"
                             : " mr-2")
@@ -80,22 +80,35 @@ function Header({ router }) {
                             e.preventDefault();
                             setAccountOpen(!accountOpen);
                           }}
+                          onMouseEnter={() => setAccountOpen(true)}
                         >
-                          <span className="mr-1">Account</span>
+                          <span className="mr-1"> Account </span>
                           <i className="fas fa-angle-down"></i>
                         </button>
                         <ul
                           className={
                             (!accountOpen ? "hidden " : "") +
-                            " z-50 absolute top-0 left-0 mt-8 bg-white border shadow-md py-2 rounded-lg flex flex-col items-start text-gray-700"
+                            " z-50 absolute top-0 left-0 mt-8 bg-white border shadow-md py-4 rounded-lg flex flex-col items-start text-gray-700"
                           }
+                          onMouseLeave={() => setAccountOpen(false)}
                         >
+                          <Link
+                            href="/profile/[username]"
+                            as={`/profile/${me.username}`}
+                          >
+                            <a className="px-4 mb-4 hover:text-yume-red">
+                              Profile
+                            </a>
+                          </Link>
+
                           <Link href="/settings">
-                            <a className="px-4 mb-2">Settings</a>
+                            <a className="px-4 mb-4 hover:text-yume-red">
+                              Settings
+                            </a>
                           </Link>
 
                           {/* <li className="w-full h-0 border border-gray-400 mb-1"></li> */}
-                          <li className="px-4">
+                          <li className="px-4  hover:text-yume-red">
                             <button onClick={() => logout(client)}>
                               Logout
                             </button>

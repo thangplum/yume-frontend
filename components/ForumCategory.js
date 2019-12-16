@@ -10,7 +10,7 @@ function ForumCategory({
 }) {
   return (
     <div className="max-w-4xl w-full p-3 py-4 flex flex bg-white border rounded">
-      <img className="w-40" src={categoryIconForSlug[slug] || ""} />
+      <img className="w-40 h-32" src={categoryIconForSlug[slug] || ""} />
       <div className="flex flex-col ml-6 items-start justify-around">
         <Link href="/forum/[slug]" as={"/forum/" + slug}>
           <a className="text-center font-bold text-2xl cursor-pointer hover:text-yume-red">

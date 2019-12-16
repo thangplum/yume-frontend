@@ -11,6 +11,8 @@
   "dependencies": {
     "@apollo/react-hooks": "3.0.0",
     "@apollo/react-ssr": "3.0.0",
+    "@dicebear/avatars": "^3.1.4",
+    "@dicebear/avatars-gridy-sprites": "^1.1.5",
     "@zeit/next-css": "^1.0.1",
     "animate.css": "^3.7.2",
     "apollo-cache-inmemory": "1.6.3",
