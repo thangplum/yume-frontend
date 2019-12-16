@@ -5,9 +5,11 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
     "./pages/**/*.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}"
   ],
-
   // Include any special characters you're using in this regular expression
-  defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+  defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+
+  // Whitelist DraftJs Css
+  whitelistPatterns: [/Draft/]
 });
 
 module.exports = {
