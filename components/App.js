@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 
 // Note: Loading Header dynamically and disable ssr, so it only renders on client-side
 const DynamicHeaderWithNoSSR = dynamic(() => import("../components/Header"), {
-  ssr: false
+  ssr: false,
+  loading: () => <p>Yume</p>
 });
 
 // Handle route events to display a progress bar on route change

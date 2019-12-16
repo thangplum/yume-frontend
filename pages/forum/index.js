@@ -43,10 +43,8 @@ const GET_FORUM_CATEGORIES_QUERY = gql`
     }
   }
 `;
-function Forum() {
-  const { loading, error, data } = useQuery(GET_FORUM_CATEGORIES_QUERY);
 
-  if (loading) return <LoadingPage />;
+function Forum({ error, data }) {
   if (error) return <ErrorPage />;
 
   const { forumCategories } = data;
@@ -78,4 +76,14 @@ function Forum() {
   );
 }
 
+Forum.getInitialProps = async ctx => {
+  try {
+    const response = await ctx.apolloClient.query({
+      query: GET_FORUM_CATEGORIES_QUERY
+    });
+    return { data: response.data };
+  } catch (e) {
+    return { error: e };
+  }
+};
 export default Forum;
