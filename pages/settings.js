@@ -1,10 +1,7 @@
 import React from "react";
-import { withAuthSync } from "../lib/auth";
-import getLoggedInUser from "../lib/getLoggedInUser";
 import redirect from "../lib/redirect";
 import { useQuery } from "@apollo/react-hooks";
 import { CURRENT_USER_QUERY } from "../components/User";
-import nextCookies from "next-cookies";
 import { LoadingPage, ErrorPage } from "../components";
 import dynamic from "next/dynamic";
 
@@ -30,13 +27,4 @@ function Settings() {
   return <DynamicSettingsFormNoSSR user={user} />;
 }
 
-Settings.getInitialProps = async ctx => {
-  // const { user, error } = await getLoggedInUser(ctx.apolloClient);
-  const token = nextCookies(ctx);
-  if (!token) {
-    redirect(ctx, "/login");
-    return {};
-  }
-  return {};
-};
-export default withAuthSync(Settings);
+export default Settings;
