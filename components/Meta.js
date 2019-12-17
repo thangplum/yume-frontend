@@ -6,12 +6,12 @@ export default () => (
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta charSet="utf-8" />
     {/* <!-- Suppress browser request for favicon.ico --> */}
-    <link
+    {/* <link
       rel="shortcut icon"
       type="image/x-icon"
       href="data:image/x-icon;,"
-    ></link>
-    <link rel="shortcut icon" href={YumeLogo} />
+    ></link> */}
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
     <title>Yume</title>
   </Head>
 );
