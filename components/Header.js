@@ -59,19 +59,7 @@ function Header({ router }) {
                     <SearchBox />
                   </div>
                 )}
-                <div className="mr-6 font-medium flex items-ceneter justify-end w-4/12">
-                  {/* <Link href="/about">
-                    <a
-                      className={
-                        "ml-8 " +
-                        (router && router.pathname === "/about"
-                          ? "text-yume-red"
-                          : "")
-                      }
-                    >
-                      About
-                    </a>
-                  </Link> */}
+                <div className="mr-6 font-medium flex items-ceneter justify-end w-4/12 font-medium">
                   <div>
                     {me && (
                       <div className="relative pl-4">
