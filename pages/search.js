@@ -16,7 +16,7 @@ const SEARCH_POST_QUERY = gql`
         caption
         comment
         created
-        numLikes
+        rating
         replies(limit: 5) {
           id
           comment

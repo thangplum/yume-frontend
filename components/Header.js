@@ -96,13 +96,27 @@ function Header({ router }) {
                             href="/profile/[username]"
                             as={`/profile/${me.username}`}
                           >
-                            <a className="px-4 mb-4 hover:text-yume-red">
+                            <a
+                              className={`px-4 mb-4 hover:text-yume-red ${
+                                router &&
+                                router.pathname.split("/")[1] === "profile"
+                                  ? " text-yume-red"
+                                  : ""
+                              }`}
+                            >
                               Profile
                             </a>
                           </Link>
 
                           <Link href="/settings">
-                            <a className="px-4 mb-4 hover:text-yume-red">
+                            <a
+                              className={`px-4 mb-4 hover:text-yume-red ${
+                                router &&
+                                router.pathname.split("/")[1] === "settings"
+                                  ? " text-yume-red"
+                                  : ""
+                              }`}
+                            >
                               Settings
                             </a>
                           </Link>

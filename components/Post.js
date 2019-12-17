@@ -1,5 +1,5 @@
 import React from "react";
-import HeartButton from "./HeartButton";
+import VoteButton from "./VoteButton";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
@@ -7,9 +7,17 @@ import User from "./User";
 import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
 
-const LIKE_POST_MUTATION = gql`
-  mutation LIKE_POST_MUTATION($postId: ID!) {
-    likePost(id: $postId) {
+const UPVOTE_POST_MUTATION = gql`
+  mutation UPVOTE_POST_MUTATION($postId: ID!) {
+    upvotePost(id: $postId) {
+      id
+    }
+  }
+`;
+
+const DOWNVOTE_POST_MUTATION = gql`
+  mutation UPVOTE_POST_MUTATION($postId: ID!) {
+    downvotePost(id: $postId) {
       id
     }
   }
@@ -50,15 +58,34 @@ function Post({
   slug,
   caption,
   comment,
-  likes,
-  numLikes,
+  upvotes,
+  downvotes,
+  rating,
   numReplies,
   author
 }) {
-  const [likePost] = useMutation(LIKE_POST_MUTATION);
+  const [upvotePost] = useMutation(UPVOTE_POST_MUTATION);
+  const [downvotePost] = useMutation(DOWNVOTE_POST_MUTATION);
 
-  const _handleLikeClick = () => {
-    likePost({
+  const _handleUpVoteClick = () => {
+    upvotePost({
+      variables: {
+        postId: id
+      },
+      // Need to refetch the posts query to get updated result in the page
+      refetchQueries: [
+        {
+          query: GET_POST_FROM_SLUG,
+          variables: {
+            slug
+          }
+        }
+      ]
+    });
+  };
+
+  const _handleDownVoteClick = () => {
+    downvotePost({
       variables: {
         postId: id
       },
@@ -75,7 +102,8 @@ function Post({
   };
 
   const _checkIfLiked = user => {
-    return likes && likes.filter(liker => liker === user.id)[0];
+    // return likes && likes.filter(liker => liker === user.id)[0];
+    return true;
   };
 
   return (
@@ -112,12 +140,15 @@ function Post({
               </p>
               <div className="text-base font-light text-gray-600 flex items-center">
                 {me && (
-                  <HeartButton
+                  <VoteButton
                     isLike={_checkIfLiked(me)}
-                    handleClick={_handleLikeClick}
+                    handleUpVoteClick={_handleUpVoteClick}
+                    handleDownVoteClick={_handleDownVoteClick}
+                    upvoted={upvotes}
+                    downvoted={downvotes}
                   />
                 )}
-                <p className="ml-2">{numLikes} Likes</p>
+                <p className="ml-2">{rating} Points</p>
               </div>
             </PostActions>
           </PostContainer>
@@ -130,7 +161,7 @@ function Post({
 Post.defaultProps = {
   caption: "",
   comment: "",
-  likes: 0,
+  rating: 0,
   numReplies: 0
 };
 

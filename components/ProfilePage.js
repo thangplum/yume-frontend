@@ -27,8 +27,9 @@ const GET_USER_PROFILE = gql`
           caption
           comment
           slug
-          numLikes
-          likes
+          rating
+          upvotes
+          downvotes
         }
       }
     }

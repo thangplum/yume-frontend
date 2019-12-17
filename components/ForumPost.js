@@ -23,7 +23,7 @@ const PostStats = ({ children }) => (
   </div>
 );
 
-function ForumPost({ caption, comment, id: postId, replies, numLikes, slug }) {
+function ForumPost({ caption, comment, id: postId, replies, rating, slug }) {
   return (
     <PostContainer>
       <Link href="/post/[slug]" as={"/post/" + slug}>
@@ -37,7 +37,7 @@ function ForumPost({ caption, comment, id: postId, replies, numLikes, slug }) {
         <div className="text-md font-medium text-gray-800">
           {replies.length} Answers
         </div>
-        <div className="text-sm font-light text-gray-600">{numLikes} Likes</div>
+        <div className="text-sm font-light text-gray-600">{rating} Points</div>
       </PostStats>
     </PostContainer>
   );
@@ -48,7 +48,7 @@ ForumPost.defaultProps = {
   comment: "",
   id: "",
   replies: [],
-  likes: 0,
+  rating: 0,
   slug: ""
 };
 

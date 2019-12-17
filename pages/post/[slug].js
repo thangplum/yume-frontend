@@ -23,8 +23,9 @@ const fragments = {
       caption
       comment
       created
-      numLikes
-      likes
+      rating
+      upvotes
+      downvotes
     }
   `
 };
@@ -84,8 +85,9 @@ const Thread = () => {
     comment,
     created,
     replies,
-    likes,
-    numLikes,
+    upvotes,
+    downvotes,
+    rating,
     category,
     author
   } = data.postBySlug;
@@ -153,8 +155,9 @@ const Thread = () => {
             id={postId}
             caption={caption}
             comment={comment}
-            likes={likes}
-            numLikes={numLikes}
+            upvotes={upvotes}
+            downvotes={downvotes}
+            rating={rating}
             numReplies={replies.length}
             author={author}
             slug={slug}

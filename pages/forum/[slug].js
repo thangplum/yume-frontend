@@ -27,7 +27,7 @@ const fragments = {
       caption
       comment
       created
-      numLikes
+      rating
     }
   `
 };
