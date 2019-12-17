@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 import User from "./User";
+import createAvatar from "../lib/createAvatar";
+import Link from "next/link";
 
 const LIKE_POST_MUTATION = gql`
   mutation LIKE_POST_MUTATION($postId: ID!) {
@@ -83,12 +85,23 @@ function Post({
         return (
           <PostContainer>
             <PostAuthor>
-              <p className="font-semibold text-gray-700 leading-tight">
-                {author.firstName} {author.lastName}
-              </p>
-              <p className="font-light text-gray-600 leading-tight ml-2">
-                @{author.username}
-              </p>
+              <div
+                className="w-8 h-8 bg-white rounded-lg"
+                dangerouslySetInnerHTML={createAvatar(author.username)}
+              />
+              {/* <div> */}
+              <Link
+                href="/profile/[username]"
+                as={`/profile/${author.username}`}
+              >
+                <a className="font-semibold text-gray-700 leading-none ml-2 cursor-pointer">
+                  {author.firstName} {author.lastName}
+                </a>
+              </Link>
+              {/* <p className="font-light text-gray-600 leading-tight ml-2">
+                  @{author.username}
+                </p> */}
+              {/* </div> */}
             </PostAuthor>
             <PostCaption>{caption}</PostCaption>
             <PostComment>{comment}</PostComment>

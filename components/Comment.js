@@ -4,6 +4,8 @@ import { useMutation } from "@apollo/react-hooks";
 import User from "./User";
 import HeartButton from "./HeartButton";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
+import createAvatar from "../lib/createAvatar";
+import Link from "next/link";
 
 const LIKE_COMMENT_MUTATION = gql`
   mutation LIKE_COMMENT_MUTATION($commentId: ID!) {
@@ -64,12 +66,22 @@ function Comment({ comment, author, id, likes, numLikes, postSlug }) {
         return (
           <CommentContainer>
             <CommentAuthor>
-              <p className="font-semibold text-xs text-gray-700 leading-tight">
-                {author.firstName} {author.lastName}
-              </p>
-              <p className="font-light text-xs text-gray-600 leading-tight ml-2">
+              <div
+                className="w-4 h-4 bg-white rounded-lg"
+                dangerouslySetInnerHTML={createAvatar(author.username)}
+              />
+              {/* <div> */}
+              <Link
+                href="/profile/[username]"
+                as={`/profile/${author.username}`}
+              >
+                <a className="font-semibold text-gray-700 leading-none ml-2 cursor-pointer text-xs">
+                  {author.firstName} {author.lastName}
+                </a>
+              </Link>
+              {/* <p className="font-light text-xs text-gray-600 leading-tight ml-2">
                 @{author.username}
-              </p>
+              </p> */}
             </CommentAuthor>
             <CommentText>{comment}</CommentText>
             <CommentActions>
