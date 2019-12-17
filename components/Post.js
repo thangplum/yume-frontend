@@ -101,11 +101,6 @@ function Post({
     });
   };
 
-  const _checkIfLiked = user => {
-    // return likes && likes.filter(liker => liker === user.id)[0];
-    return true;
-  };
-
   return (
     <User>
       {({ data, error }) => {
@@ -141,7 +136,6 @@ function Post({
               <div className="text-base font-light text-gray-600 flex items-center">
                 {me && (
                   <VoteButton
-                    isLike={_checkIfLiked(me)}
                     handleUpVoteClick={_handleUpVoteClick}
                     handleDownVoteClick={_handleDownVoteClick}
                     upvoted={upvotes}

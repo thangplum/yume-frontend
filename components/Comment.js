@@ -2,18 +2,9 @@ import React from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import User from "./User";
-import HeartButton from "./HeartButton";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
-
-const LIKE_COMMENT_MUTATION = gql`
-  mutation LIKE_COMMENT_MUTATION($commentId: ID!) {
-    likeComment(id: $commentId) {
-      id
-    }
-  }
-`;
 
 const CommentContainer = ({ children }) => (
   <div className="bg-white mb-2 py-2 px-2 rounded-lg">{children}</div>
@@ -35,30 +26,7 @@ const CommentActions = ({ children }) => (
   </div>
 );
 
-function Comment({ comment, author, id, likes, numLikes, postSlug }) {
-  const [likeComment] = useMutation(LIKE_COMMENT_MUTATION);
-
-  const _handleLikeClick = () => {
-    likeComment({
-      variables: {
-        commentId: id
-      },
-      // Need to refetch the posts query to get updated result in the page
-      refetchQueries: [
-        {
-          query: GET_POST_FROM_SLUG,
-          variables: {
-            slug: postSlug
-          }
-        }
-      ]
-    });
-  };
-
-  const _checkIfLiked = user => {
-    return likes && likes.filter(liker => liker === user.id).length;
-  };
-
+function Comment({ comment, author, id, postSlug }) {
   return (
     <User>
       {({ data, error }) => {
@@ -70,7 +38,7 @@ function Comment({ comment, author, id, likes, numLikes, postSlug }) {
                 className="w-4 h-4 bg-white rounded-lg"
                 dangerouslySetInnerHTML={createAvatar(author.username)}
               />
-              {/* <div> */}
+
               <Link
                 href="/profile/[username]"
                 as={`/profile/${author.username}`}
@@ -79,23 +47,8 @@ function Comment({ comment, author, id, likes, numLikes, postSlug }) {
                   {author.firstName} {author.lastName}
                 </a>
               </Link>
-              {/* <p className="font-light text-xs text-gray-600 leading-tight ml-2">
-                @{author.username}
-              </p> */}
             </CommentAuthor>
             <CommentText>{comment}</CommentText>
-            <CommentActions>
-              {me && (
-                <HeartButton
-                  isLike={_checkIfLiked(me)}
-                  handleClick={_handleLikeClick}
-                  small
-                />
-              )}
-              <div className="text-xs font-light text-gray-600 ml-1">
-                {numLikes} Likes
-              </div>
-            </CommentActions>
           </CommentContainer>
         );
       }}

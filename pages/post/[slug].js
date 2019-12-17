@@ -45,13 +45,12 @@ const GET_POST_FROM_SLUG = gql`
       replies {
         id
         comment
-        likes
-        numLikes
+        upvotes
+        downvotes
+        rating
         comments {
           id
           comment
-          likes
-          numLikes
           author {
             ...UserFragment
           }

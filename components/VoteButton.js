@@ -61,8 +61,6 @@ function VoteButton({
   );
 }
 
-VoteButton.defaultProps = {
-  isLike: false
-};
+VoteButton.defaultProps = {};
 
 export default VoteButton;

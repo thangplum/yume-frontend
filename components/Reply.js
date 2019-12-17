@@ -2,14 +2,22 @@ import React from "react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import User from "./User";
-import HeartButton from "./HeartButton";
+import VoteButton from "./VoteButton";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
 
-const LIKE_REPLY_MUTATION = gql`
-  mutation LIKE_REPLY_MUTATION($replyId: ID!) {
-    likeReply(id: $replyId) {
+const UPVOTE_REPLY_MUTATION = gql`
+  mutation UPVOTE_REPLY_MUTATION($replyId: ID!) {
+    upvoteReply(id: $replyId) {
+      id
+    }
+  }
+`;
+
+const DOWNVOTE_REPLY_MUTATION = gql`
+  mutation DOWNVOTE_REPLY_MUTATION($replyId: ID!) {
+    downvoteReply(id: $replyId) {
       id
     }
   }
@@ -39,11 +47,21 @@ const ReplyActions = ({ children }) => (
   </div>
 );
 
-function Reply({ comment, author, id, comments, likes, numLikes, postSlug }) {
-  const [likeReply] = useMutation(LIKE_REPLY_MUTATION);
+function Reply({
+  comment,
+  author,
+  id,
+  comments,
+  upvotes,
+  downvotes,
+  rating,
+  postSlug
+}) {
+  const [upvoteReply] = useMutation(UPVOTE_REPLY_MUTATION);
+  const [downvoteReply] = useMutation(DOWNVOTE_REPLY_MUTATION);
 
-  const _handleLikeClick = () => {
-    likeReply({
+  const _handleUpVoteClick = () => {
+    upvoteReply({
       variables: {
         replyId: id
       },
@@ -59,8 +77,21 @@ function Reply({ comment, author, id, comments, likes, numLikes, postSlug }) {
     });
   };
 
-  const _checkIfLiked = user => {
-    return likes && likes.filter(liker => liker === user.id).length;
+  const _handleDownVoteClick = () => {
+    downvoteReply({
+      variables: {
+        replyId: id
+      },
+      // Need to refetch the posts query to get updated result in the page
+      refetchQueries: [
+        {
+          query: GET_POST_FROM_SLUG,
+          variables: {
+            slug: postSlug
+          }
+        }
+      ]
+    });
   };
 
   return (
@@ -95,12 +126,14 @@ function Reply({ comment, author, id, comments, likes, numLikes, postSlug }) {
               </p>
               <div className=" flex items-center text-sm font-light text-gray-600">
                 {me && (
-                  <HeartButton
-                    isLike={_checkIfLiked(me)}
-                    handleClick={_handleLikeClick}
+                  <VoteButton
+                    upvoted={upvotes}
+                    downvoted={downvotes}
+                    handleUpVoteClick={_handleUpVoteClick}
+                    handleDownVoteClick={_handleDownVoteClick}
                   />
                 )}
-                <p className="ml-2">{numLikes} Likes</p>
+                <p className="ml-2">{rating} Points</p>
               </div>
             </ReplyActions>
           </ReplyContainer>
