@@ -14,6 +14,9 @@ const GET_USER_PROFILE = gql`
       firstName
       lastName
       created
+      college
+      major
+      location
       bookmarks {
         id
       }
@@ -50,15 +53,37 @@ function ProfilePage() {
 
   return (
     <div className="container mx-auto flex pt-12">
-      <div className="w-3/12 flex pl-20 text-xl">
-        <ul>
-          <li className="w-40 border bg-white rounded-lg mb-6">
-            <div dangerouslySetInnerHTML={createAvatar(user.username)} />
+      <div className="w-3/12  flex pl-20">
+        <ul className="text-base">
+          <li className="flex flex-col items-center mb-4">
+            <div className="w-40 border bg-white rounded-lg mb-2">
+              <div dangerouslySetInnerHTML={createAvatar(user.username)} />
+            </div>
+            <p className="text-yume-red text-2xl font-medium">
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="text-base">@{user.username}</p>
           </li>
-          <li className="text-yume-red text-2xl">
-            {user.firstName} {user.lastName}
-          </li>
-          <li>@{user.username}</li>
+          {user.major && (
+            <li className="mb-2 text-gray-600">
+              <i className="fas fa-graduation-cap text-yume-red w-10" />
+              {user.major}
+            </li>
+          )}
+          {user.college && (
+            <li className="mb-2 text-gray-600">
+              {" "}
+              <i className="fas fa-university text-yume-red  w-10" />
+              {user.college}
+            </li>
+          )}
+          {user.location && (
+            <li className="mb-2 text-gray-600">
+              {" "}
+              <i className="fas fa-map-marker-alt text-yume-red  w-10" />
+              {user.location}
+            </li>
+          )}
         </ul>
       </div>
       <div className="w-9/12 flex flex-col px-12 pb-16">
@@ -67,7 +92,7 @@ function ProfilePage() {
         </h2>
         <div>
           {posts.map(post => (
-            <div className="mb-6">
+            <div key={post.id} className="mb-6">
               <ForumPost {...post} />
             </div>
           ))}
@@ -77,4 +102,5 @@ function ProfilePage() {
   );
 }
 
+export { GET_USER_PROFILE };
 export default ProfilePage;
