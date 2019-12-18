@@ -6,6 +6,7 @@ import VoteButton from "./VoteButton";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
+import ReadMoreReact from 'read-more-react';
 
 const UPVOTE_REPLY_MUTATION = gql`
   mutation UPVOTE_REPLY_MUTATION($replyId: ID!) {
@@ -33,7 +34,7 @@ const ReplyAuthor = ({ children }) => (
 
 const ReplyComment = ({ children }) => (
   <div className="w-full px-3 py-2 mb-2 text-base leading-snug text-gray-800">
-    {children}
+    <ReadMoreReact text={children} />
   </div>
 );
 

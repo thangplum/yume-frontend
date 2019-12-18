@@ -8,6 +8,7 @@ import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
 import redirect from "../lib/redirect";
 import { Router, useRouter } from "next/router";
+import ReadMoreReact from 'read-more-react';
 
 const UPVOTE_POST_MUTATION = gql`
   mutation UPVOTE_POST_MUTATION($postId: ID!) {
@@ -65,7 +66,7 @@ const PostCaption = ({ children }) => (
 
 const PostComment = ({ children }) => (
   <div className="w-full px-4 py-2 mb-2 text-md leading-snug text-gray-800 ">
-    {children}
+    <ReadMoreReact text={children} />
   </div>
 );
 
