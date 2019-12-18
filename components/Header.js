@@ -40,34 +40,20 @@ function AccountDropDown({ user, router }) {
         }}
         onMouseEnter={() => setAccountOpen(true)}
       >
-        <div className="flex items-center mr-1 font-semibold">
-          Account
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="feather feather-chevron-down"
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
+        <div className="flex items-center mr-1 font-medium">
+          Account <ChevronDownSvg />
         </div>
       </button>
       <ul
         className={
           (!accountOpen ? "hidden " : "") +
-          " z-50 absolute top-0 left-0 mt-8 bg-white border shadow-md py-4 rounded-lg flex flex-col items-start "
+          " z-50 absolute top-0 left-0 mt-8 bg-white border shadow-md rounded-lg flex flex-col items-start "
         }
         onMouseLeave={() => setAccountOpen(false)}
       >
         <Link href="/profile/[username]" as={`/profile/${user.username}`}>
           <a
-            className={`px-4 mb-4 hover:text-yume-red ${
+            className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
               router && router.pathname.split("/")[1] === "profile"
                 ? " text-yume-red"
                 : ""
@@ -77,9 +63,20 @@ function AccountDropDown({ user, router }) {
           </a>
         </Link>
 
+        <Link href="/bookmarks">
+          <a
+            className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
+              router && router.pathname.split("/")[1] === "bookmarks"
+                ? " text-yume-red"
+                : ""
+            }`}
+          >
+            Bookmarks
+          </a>
+        </Link>
         <Link href="/settings">
           <a
-            className={`px-4 mb-4 hover:text-yume-red ${
+            className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
               router && router.pathname.split("/")[1] === "settings"
                 ? " text-yume-red"
                 : ""
@@ -89,9 +86,8 @@ function AccountDropDown({ user, router }) {
           </a>
         </Link>
 
-        {/* <li className="w-full h-0 border border-gray-400 mb-1"></li> */}
-        <li className="px-4  hover:text-yume-red ">
-          <button className="font-semibold" onClick={() => logout(client)}>
+        <li className="flex w-full px-4 py-3 hover:bg-gray-200 ">
+          <button className="font-medium" onClick={() => logout(client)}>
             Logout
           </button>
         </li>
@@ -136,7 +132,7 @@ function Header({ router }) {
                     <SearchBox />
                   </div>
                 )}
-                <div className="mr-6 font-medium flex items-ceneter justify-end w-4/12 font-semibold text-black">
+                <div className="mr-6 font-medium flex items-ceneter justify-end w-4/12 font-medium text-black">
                   <div>
                     {me && <AccountDropDown user={me} router={router} />}
                   </div>
@@ -181,4 +177,20 @@ Header.defaultProps = {
   router: { pathname: "/" }
 };
 
+const ChevronDownSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-chevron-down"
+  >
+    <polyline points="6 9 12 15 18 9"></polyline>
+  </svg>
+);
 export default withRouter(Header);
