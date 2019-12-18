@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import ReadMoreReact from 'read-more-react';
 
 const PostContainer = ({ children }) => (
   <div className="rounded-lg bg-white shadow-lg p-2">{children}</div>
@@ -13,7 +14,7 @@ const PostCaption = ({ children }) => (
 
 const PostComment = ({ children }) => (
   <div className="w-full px-3 mb-2 text-md leading-snug text-gray-800 ">
-    {children}
+    <ReadMoreReact text={children} max={150} />
   </div>
 );
 
