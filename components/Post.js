@@ -9,6 +9,7 @@ import Link from "next/link";
 import redirect from "../lib/redirect";
 import { Router, useRouter } from "next/router";
 import ReadMoreReact from 'read-more-react';
+import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
 
 const UPVOTE_POST_MUTATION = gql`
   mutation UPVOTE_POST_MUTATION($postId: ID!) {
@@ -128,6 +129,12 @@ function Post({
     });
   };
 
+  //URL from current page
+  const url = window.location.href;
+  //URL patterns for Social media sites share functionalities
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+  const twitterUrl = `https://twitter.com/home?status=${url}`;
+
   return (
     <User>
       {({ data, error }) => {
@@ -170,7 +177,14 @@ function Post({
                   />
                 )}
                 <p className="ml-2">{rating} Points</p>
+                <FacebookShareButton className="ml-2" url={facebookUrl}>
+                  <FacebookIcon size={35} round />
+                </FacebookShareButton>
+                <TwitterShareButton className="ml-2" url={twitterUrl}>
+                  <TwitterIcon size={35} round />
+                </TwitterShareButton>
               </div>
+              
             </PostActions>
             {me && <PostOptions user={me} postId={id} postAuthor={author} />}
           </PostContainer>
