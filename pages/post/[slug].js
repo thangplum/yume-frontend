@@ -11,6 +11,7 @@ import { useState } from "react";
 const fragments = {
   user: gql`
     fragment UserFragment on User {
+      id
       username
       firstName
       lastName
@@ -76,8 +77,9 @@ const Thread = () => {
   if (loading) {
     return <LoadingPage />;
   }
-  if (error) return <ErrorPage />;
+  if (error || (data && !data.postBySlug)) return <ErrorPage />;
 
+  const post = data.postBySlug;
   const {
     id: postId,
     caption,
@@ -89,7 +91,7 @@ const Thread = () => {
     rating,
     category,
     author
-  } = data.postBySlug;
+  } = post;
 
   const MainSection = ({ children }) => (
     <div className="max-w-5xl p-8 flex flex-col items-start">{children}</div>

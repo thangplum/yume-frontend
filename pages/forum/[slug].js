@@ -145,7 +145,7 @@ function ForumPosts() {
   if (loading) {
     return <LoadingPage />;
   }
-  if (error) {
+  if (error || (data && !data.category)) {
     return <ErrorPage />;
   }
 

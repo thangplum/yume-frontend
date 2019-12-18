@@ -12,6 +12,9 @@ const CURRENT_USER_QUERY = gql`
       major
       college
       location
+      bookmarks {
+        id
+      }
     }
   }
 `;
