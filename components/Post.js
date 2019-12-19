@@ -8,8 +8,10 @@ import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
 import redirect from "../lib/redirect";
 import { Router, useRouter } from "next/router";
-import ReadMoreReact from 'read-more-react';
-import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
+import ReadMoreReact from "read-more-react";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
+import FacebookIcon from "../icons/f_logo.png";
+import TwitterIcon from "../icons/twitter_logo.svg";
 
 const UPVOTE_POST_MUTATION = gql`
   mutation UPVOTE_POST_MUTATION($postId: ID!) {
@@ -176,15 +178,22 @@ function Post({
                     downvoted={downvotes}
                   />
                 )}
-                <p className="ml-2">{rating} Points</p>
-                <FacebookShareButton className="ml-2" url={facebookUrl}>
-                  <FacebookIcon size={35} round />
+                <p className="ml-3">{rating} Points</p>
+                <FacebookShareButton
+                  className="ml-3 outline-none focus:outline-none"
+                  url={url}
+                  quote={caption}
+                >
+                  <img src={FacebookIcon} className="w-6" />
                 </FacebookShareButton>
-                <TwitterShareButton className="ml-2" url={twitterUrl}>
-                  <TwitterIcon size={35} round />
+                <TwitterShareButton
+                  className="ml-3 outline-none focus:outline-none"
+                  url={url}
+                  title={caption}
+                >
+                  <img src={TwitterIcon} className="w-6" />
                 </TwitterShareButton>
               </div>
-              
             </PostActions>
             {me && <PostOptions user={me} postId={id} postAuthor={author} />}
           </PostContainer>
