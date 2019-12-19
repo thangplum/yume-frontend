@@ -14,7 +14,13 @@ const PostCaption = ({ children }) => (
 
 const PostComment = ({ children }) => (
   <div className="w-full px-3 mb-2 text-md leading-snug text-gray-800 ">
-    <ReadMoreReact text={children} readMoreText="..." />
+    <ReadMoreReact
+      text={children}
+      min={150}
+      ideal={200}
+      max={250}
+      readMoreText="..."
+    />
   </div>
 );
 
