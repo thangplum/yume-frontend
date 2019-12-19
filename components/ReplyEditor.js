@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EditorState, RichUtils, ContentState } from "draft-js";
+import { EditorState, RichUtils, ContentState, convertToRaw } from "draft-js";
 import "draft-js/dist/Draft.css";
 import Editor from "./Editor";
 import { stateToHTML } from "draft-js-export-html";
@@ -8,11 +8,19 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 
+const MAX_COMMENT_LENGTH = 30000;
+const MIN_COMMENT_LENGTH = 20;
+
 const CREATE_REPLY_MUTATION = gql`
-  mutation CREATE_REPLY_MUTATION($comment: String!, $post: ID!) {
-    createReply(comment: $comment, post: $post) {
+  mutation CREATE_REPLY_MUTATION(
+    $comment: String!
+    $post: ID!
+    $commentRaw: String!
+  ) {
+    createReply(comment: $comment, post: $post, commentRaw: $commentRaw) {
       id
       comment
+      commentRaw
     }
   }
 `;
@@ -35,6 +43,7 @@ const StyledReplyEditor = ({ children }) => (
 function ReplyEditor({ postId, postSlug }) {
   const [createReply] = useMutation(CREATE_REPLY_MUTATION);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [error, setError] = useState("");
 
   const currentStyle = editorState.getCurrentInlineStyle();
   const _toggleInlineStyle = evt => {
@@ -48,10 +57,21 @@ function ReplyEditor({ postId, postSlug }) {
     const text = editorState.getCurrentContent().getPlainText();
     const convertedHtml = stateToHTML(editorState.getCurrentContent());
 
+    if (text.length < MIN_COMMENT_LENGTH) {
+      setError(`Min length is ${MIN_COMMENT_LENGTH} characters.`);
+      return;
+    }
+    if (text.length > MAX_COMMENT_LENGTH) {
+      setError(`Max length is ${MAX_COMMENT_LENGTH} characters.`);
+      return;
+    }
+
+    const commentRaw = convertToRaw(editorState.getCurrentContent());
     createReply({
       variables: {
         post: postId,
-        comment: text
+        comment: text,
+        commentRaw: JSON.stringify(commentRaw)
       },
       refetchQueries: [
         {
@@ -66,6 +86,7 @@ function ReplyEditor({ postId, postSlug }) {
 
   return (
     <>
+      {error && <p className="text-xs text-yume-red">{error}</p>}
       <StyledReplyEditor>
         <Editor
           placeholder={"Write a reply"}

@@ -41,6 +41,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-share": "^3.0.1",
+    "react-truncate-html": "^0.1.7",
     "read-more-react": "^1.0.9",
     "semantic-ui-react": "^0.88.1",
     "tailwindcss": "^1.1.3",

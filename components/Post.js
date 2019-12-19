@@ -8,10 +8,10 @@ import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
 import redirect from "../lib/redirect";
 import { Router, useRouter } from "next/router";
-import ReadMoreReact from "read-more-react";
 import { FacebookShareButton, TwitterShareButton } from "react-share";
 import FacebookIcon from "../icons/f_logo.png";
 import TwitterIcon from "../icons/twitter_logo.svg";
+import RenderText from "./RenderText";
 
 const UPVOTE_POST_MUTATION = gql`
   mutation UPVOTE_POST_MUTATION($postId: ID!) {
@@ -69,7 +69,7 @@ const PostCaption = ({ children }) => (
 
 const PostComment = ({ children }) => (
   <div className="w-full px-4 py-2 mb-2 text-md leading-snug text-gray-800 ">
-    <ReadMoreReact text={children} />
+    {children}
   </div>
 );
 
@@ -88,6 +88,7 @@ function Post({
   slug,
   caption,
   comment,
+  commentRaw,
   upvotes,
   downvotes,
   rating,
@@ -132,10 +133,7 @@ function Post({
   };
 
   //URL from current page
-  const url = window.location.href;
-  //URL patterns for Social media sites share functionalities
-  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  const twitterUrl = `https://twitter.com/home?status=${url}`;
+  const url = typeof window !== "undefined" && window.location.href;
 
   return (
     <User>
@@ -163,7 +161,9 @@ function Post({
               {/* </div> */}
             </PostAuthor>
             <PostCaption>{caption}</PostCaption>
-            <PostComment>{comment}</PostComment>
+            <PostComment>
+              <RenderText text={comment} rawText={commentRaw} />
+            </PostComment>
             <PostSeparator />
             <PostActions>
               <p className="text-lg font-medium text-gray-800">
@@ -272,10 +272,7 @@ function PostOptions({ user, postId, postAuthor }) {
           <BookmarkSvg isBookmarked={isBookmarked} />{" "}
           {isBookmarked ? "UnBookmark" : "Bookmark"}
         </button>
-        {/* <button className="flex w-full items-center px-4 py-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
-          <ShareSvg />
-          Share
-        </button>
+        {/* 
         <button className="flex w-full items-center px-4 py-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
           <FlagSvg /> Report
         </button> */}
@@ -309,27 +306,6 @@ const ViewMoreSvg = () => (
     <circle cx="12" cy="12" r="1"></circle>
     <circle cx="19" cy="12" r="1"></circle>
     <circle cx="5" cy="12" r="1"></circle>
-  </svg>
-);
-
-const ShareSvg = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="feather feather-share-2 mr-3"
-  >
-    <circle cx="18" cy="5" r="3"></circle>
-    <circle cx="6" cy="12" r="3"></circle>
-    <circle cx="18" cy="19" r="3"></circle>
-    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
   </svg>
 );
 

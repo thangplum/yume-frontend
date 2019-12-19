@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EditorState, RichUtils, ContentState } from "draft-js";
+import { EditorState, RichUtils, ContentState, convertToRaw } from "draft-js";
 import "draft-js/dist/Draft.css";
 import Editor from "./Editor";
 import { stateToHTML } from "draft-js-export-html";
@@ -9,12 +9,26 @@ import { getOperationName } from "apollo-link";
 import { minLengthForQuestionCaption } from "../config";
 import { GET_CATEGORY_POSTS } from "../pages/forum/[slug]";
 
+const MAX_COMMENT_LENGTH = 30000;
+const MAX_TITLE_LENGTH = 150;
+
 const CREATE_POST = gql`
-  mutation CREATE_POST($caption: String!, $comment: String!, $category: ID!) {
-    createPost(caption: $caption, comment: $comment, category: $category) {
+  mutation CREATE_POST(
+    $caption: String!
+    $comment: String!
+    $commentRaw: String!
+    $category: ID!
+  ) {
+    createPost(
+      caption: $caption
+      comment: $comment
+      category: $category
+      commentRaw: $commentRaw
+    ) {
       id
       caption
       comment
+      commentRaw
     }
   }
 `;
@@ -111,6 +125,7 @@ const StyledSubmitButton = ({ handleSubmit }) => (
 
 function QuestionEditor({ question, setQuestion }) {
   const minLength = minLengthForQuestionCaption;
+  const maxLength = MAX_TITLE_LENGTH;
   const [error, setError] = useState(false);
   const _handleChange = e => {
     e.preventDefault();
@@ -118,14 +133,17 @@ function QuestionEditor({ question, setQuestion }) {
   };
   const _checkValidation = e => {
     e.preventDefault();
-    if (e.target.value.length < minLength) {
+    if (
+      e.target.value.length < minLength ||
+      e.target.value.length > maxLength
+    ) {
       setError(true);
     }
   };
   return (
     <div className="w-full flex flex-col mb-4">
       <p className={"text-yume-red text-xs " + (!error ? " hidden" : "")}>
-        Question must have a length of {minLength} letters.
+        Question must have a length between {minLength} and {maxLength} letters.
       </p>
       <textarea
         className={
@@ -154,7 +172,7 @@ function PostEditor({
   const [postCategory, setPostCategory] = useState(
     subcategories && subcategories.length ? subcategories[0].id : ""
   );
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const currentStyle = editorState.getCurrentInlineStyle();
   const _toggleInlineStyle = evt => {
@@ -165,17 +183,24 @@ function PostEditor({
 
   const _handleSubmit = e => {
     e.preventDefault();
+    setError("");
     const text = editorState.getCurrentContent().getPlainText();
     const convertedHtml = stateToHTML(editorState.getCurrentContent());
 
     if (question.length < minLengthForQuestionCaption) return;
+    if (text.length > MAX_COMMENT_LENGTH) {
+      setError("Max character length exceeded");
+      return;
+    }
 
+    const commentRaw = convertToRaw(editorState.getCurrentContent());
     // Note: Here in refetchQueries, since we are using "getOperationName", it will refetch the queries
     // with the variables used to call the query previously
     createPost({
       variables: {
         caption: question,
         comment: text,
+        commentRaw: JSON.stringify(commentRaw),
         category: postCategory
       },
       refetchQueries: [getOperationName(GET_CATEGORY_POSTS)]
@@ -189,7 +214,7 @@ function PostEditor({
         setEditorState(newState);
         setIsEditorOpen(false);
       })
-      .catch(e => setError(true));
+      .catch(e => setError("Error creating post"));
   };
 
   return (

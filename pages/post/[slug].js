@@ -23,6 +23,7 @@ const fragments = {
       slug
       caption
       comment
+      commentRaw
       created
       rating
       upvotes
@@ -46,6 +47,7 @@ const GET_POST_FROM_SLUG = gql`
       replies {
         id
         comment
+        commentRaw
         upvotes
         downvotes
         rating
@@ -84,6 +86,7 @@ const Thread = () => {
     id: postId,
     caption,
     comment,
+    commentRaw,
     created,
     replies,
     upvotes,
@@ -156,6 +159,7 @@ const Thread = () => {
             id={postId}
             caption={caption}
             comment={comment}
+            commentRaw={commentRaw}
             upvotes={upvotes}
             downvotes={downvotes}
             rating={rating}

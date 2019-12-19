@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import User from "./User";
@@ -6,7 +6,8 @@ import VoteButton from "./VoteButton";
 import { GET_POST_FROM_SLUG } from "../pages/post/[slug]";
 import createAvatar from "../lib/createAvatar";
 import Link from "next/link";
-import ReadMoreReact from 'read-more-react';
+import { useRouter } from "next/router";
+import RenderText from "./RenderText";
 
 const UPVOTE_REPLY_MUTATION = gql`
   mutation UPVOTE_REPLY_MUTATION($replyId: ID!) {
@@ -24,8 +25,16 @@ const DOWNVOTE_REPLY_MUTATION = gql`
   }
 `;
 
+const DELETE_REPLY_MUTATION = gql`
+  mutation DELETE_REPLY_MUTATION($replyId: ID!) {
+    deleteReply(id: $replyId) {
+      id
+    }
+  }
+`;
+
 const ReplyContainer = ({ children }) => (
-  <div className="shadow-md rounded p-3 bg-white">{children}</div>
+  <div className="relative shadow-md rounded p-3 bg-white">{children}</div>
 );
 
 const ReplyAuthor = ({ children }) => (
@@ -34,7 +43,7 @@ const ReplyAuthor = ({ children }) => (
 
 const ReplyComment = ({ children }) => (
   <div className="w-full px-3 py-2 mb-2 text-base leading-snug text-gray-800">
-    <ReadMoreReact text={children} />
+    {children}
   </div>
 );
 
@@ -50,6 +59,7 @@ const ReplyActions = ({ children }) => (
 
 function Reply({
   comment,
+  commentRaw,
   author,
   id,
   comments,
@@ -119,7 +129,9 @@ function Reply({
                 @{author.username}
               </p> */}
             </ReplyAuthor>
-            <ReplyComment>{comment}</ReplyComment>
+            <ReplyComment>
+              <RenderText text={comment} rawText={commentRaw} />
+            </ReplyComment>
             <ReplySeparator />
             <ReplyActions>
               <p className="text-base font-medium text-gray-800">
@@ -137,6 +149,14 @@ function Reply({
                 <p className="ml-2">{rating} Points</p>
               </div>
             </ReplyActions>
+            {me && (
+              <ReplyOptions
+                user={me}
+                replyId={id}
+                replyAuthor={author}
+                postSlug={postSlug}
+              />
+            )}
           </ReplyContainer>
         );
       }}
@@ -148,4 +168,139 @@ Reply.defaultProps = {
   comment:
     "Lorem aute duis exercitation amet aliqua ea in voluptate laborum. Incididunt ad labore deserunt enim culpa dolore fugiat deserunt exercitation proident tempor. Proident aute labore nulla laboris reprehenderit laborum enim mollit voluptate excepteur laborum fugiat. Culpa ullamco elit dolor esse id. Quis cillum sint nulla consequat labore cupidatat. Consectetur nisi aute ipsum enim deserunt non sint. Ex est pariatur ex officia aliquip et aliquip mollit ea Lorem irure eu voluptate commodo."
 };
+
+function ReplyOptions({ user, replyId, replyAuthor, postSlug }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteReply] = useMutation(DELETE_REPLY_MUTATION);
+
+  const router = useRouter();
+
+  const isReplyAuthor = user.id === replyAuthor.id;
+  const _handleDeleteReplyClick = () => {
+    deleteReply({
+      variables: {
+        replyId
+      },
+      // Need to refetch the posts query to get updated result in the page
+      refetchQueries: [
+        {
+          query: GET_POST_FROM_SLUG,
+          variables: {
+            slug: postSlug
+          }
+        }
+      ]
+    });
+  };
+
+  return (
+    <div className="absolute top-0 right-0 flex flex-col items-end">
+      <button
+        onMouseDown={e => {
+          e.preventDefault();
+          setIsOpen(!isOpen);
+        }}
+        className="mr-4 mt-2 rounded-full hover:bg-gray-200 p-1 cursor-pointer outline-none focus:outline-none"
+      >
+        <ViewMoreSvg />
+      </button>
+      <div
+        onMouseDown={() => setIsOpen(false)}
+        className={
+          (!isOpen ? "hidden " : "") +
+          " bg-white rounded shadow-md border z-10 mr-4 mt-2"
+        }
+      >
+        <button className="flex w-full items-center px-4 pt-3 pb-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
+          <FlagSvg /> Report
+        </button>
+        {isReplyAuthor && (
+          <button
+            onMouseDown={_handleDeleteReplyClick}
+            className="flex w-full items-center px-4 pt-2 pb-3 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none text-red-800"
+          >
+            <DeleteSvg />
+            Delete
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const ViewMoreSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-more-horizontal text-gray-700"
+  >
+    <circle cx="12" cy="12" r="1"></circle>
+    <circle cx="19" cy="12" r="1"></circle>
+    <circle cx="5" cy="12" r="1"></circle>
+  </svg>
+);
+
+const BookmarkSvg = ({ isBookmarked }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={`${
+      isBookmarked ? "fill-current" : ""
+    } feather feather-bookmark mr-3`}
+  >
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+  </svg>
+);
+
+const FlagSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-flag mr-3"
+  >
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+    <line x1="4" y1="22" x2="4" y2="15"></line>
+  </svg>
+);
+
+const DeleteSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-trash-2 mr-3"
+  >
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
 export default Reply;
