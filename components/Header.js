@@ -32,7 +32,7 @@ function AccountDropDown({ user, router }) {
   }, []);
 
   return (
-    <div className="relative pl-4">
+    <div className="relative block ml-8 mt-1 rounded hover:bg-gray-200 px-2 py-1 sm:mt-0 sm:ml-2">
       <button
         onMouseDown={e => {
           e.preventDefault();
@@ -106,67 +106,76 @@ const NavLogo = ({ router }) => (
         }
         src={YumeLogo}
       />
-      <p className={router && router.pathname === "/" ? "text-2xl" : "text-xl"}>
+      <p className={"text-base  " + (router && router.pathname === "/" ? "sm:text-2xl" : "sm:text-xl")}>
         yume
       </p>
     </a>
   </Link>
 );
 function Header({ router }) {
+  const [isOpen, setOpen] = useState(false);
   return (
     <User>
       {({ data, error }) => {
         const me = data ? data.whoami : null;
         return (
-          <div className="bg-white">
-            <header className="container mx-auto">
-              {/* Header for very small sizes (only logo) */}
-              <MobileNav router={router} />
-              {/* Header for small and anything bigger */}
-              <div className="hidden sm:flex justify-between py-5 mx-12 items-center">
-                <div className="ml-6 flex w-4/12">
-                  <NavLogo router={router} />
+          <header className="container mx-auto sm:flex sm:justify-between sm:items-center bg-white">
+            {/* Header for very small sizes (only logo) */}
+            {/* <MobileNav router={router} /> */}
+            {/* Header for small and anything bigger */}
+            <div className="flex justify-between py-4 px-2 items-center">
+              <div className="sm:w-4/12">
+                <NavLogo router={router} />
+              </div>
+              {router && router.pathname !== "/" && (
+                <div className="flex items-center px-7 sm:w-4/12 sm:px-20">
+                  <SearchBox />
                 </div>
-                {router && router.pathname !== "/" && (
-                  <div className="flex items-center justify-center w-4/12">
-                    <SearchBox />
-                  </div>
-                )}
-                <div className="mr-6 font-medium flex items-ceneter justify-end w-4/12 font-medium text-black">
-                  <div>
-                    {me && <AccountDropDown user={me} router={router} />}
-                  </div>
-                  {!me && (
-                    <Link href="/login">
-                      <a
-                        href="/login"
-                        className={
-                          "ml-8 " +
-                          (router && router.pathname === "/login"
-                            ? "text-yume-red"
-                            : "")
-                        }
-                      >
-                        Log In
-                      </a>
-                    </Link>
-                  )}
-                  <Link href="/forum">
+              )}
+              <div className="px-2 sm:w-4/12 sm:p-0">
+                <button onClick={() => setOpen(!isOpen)} type="button" className="sm:hidden block text-gray hover:text-gray-500 focus:text-gray-500 focus:outline-none items-center">
+                  <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                    {isOpen ? 
+                    <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/> 
+                    : 
+                    <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>}
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className={"px-2 pt-2 pb-4 sm:p-0 sm:mr-6 font-medium sm:flex sm:items-center sm:justify-end w-4/12 font-medium text-black" + (isOpen ? " block" : " hidden")}>
+                <div>
+                  {me && <AccountDropDown user={me} router={router} />}
+                </div>
+                {!me && (
+                  <Link href="/login">
                     <a
+                      href="/login"
                       className={
-                        "ml-8 " +
-                        (router && router.pathname === "/forum"
+                        "block ml-8 mt-1 rounded hover:bg-gray-200 px-2 py-1 sm:mt-0 sm:ml-2 " +
+                        (router && router.pathname === "/login"
                           ? "text-yume-red"
                           : "")
                       }
                     >
-                      Forum
+                      Log In
                     </a>
                   </Link>
-                </div>
+                )}
+                <Link href="/forum">
+                  <a
+                    className={
+                      "block ml-8 mt-1 rounded hover:bg-gray-200 px-2 py-1 sm:mt-0 sm:ml-2 " +
+                      (router && router.pathname === "/forum"
+                        ? "text-yume-red"
+                        : "")
+                    }
+                  >
+                    Forum
+                  </a>
+                </Link>
               </div>
-            </header>
-          </div>
+          </header>
         );
       }}
     </User>
