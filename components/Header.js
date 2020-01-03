@@ -3,6 +3,7 @@ import Link from "next/link";
 import { withRouter } from "next/router";
 import YumeLogo from "../icons/logo.svg";
 import BurgerMenu from "../icons/burger_menu.svg";
+import LeftArrow from "../icons/left-arrow.svg";
 import User from "./User";
 import { useApolloClient } from "@apollo/react-hooks";
 import { logout } from "../lib/auth";
@@ -195,16 +196,17 @@ const SearchButton = ({toggleSearchbar}) => {
   );
 };
 
-const Searchbox = ({searchboxOpen}) => {
+const Searchbox = ({searchboxOpen, toggleSearchbar}) => {
   if (searchboxOpen) {
     return (
       <form action="/search">
-        <div className="relative text-gray-600">
+        <div className="relative justify-between w-screen text-gray-600">
+          <button className="left-0 top-0 w-4 h-3 mt-4 ml-4 mr-4" onClick={toggleSearchbar}><img src={LeftArrow} /></button>
           <input
             type="search"
             name="query"
             placeholder="Search"
-            className="bg-gray-200 w-screen mt-2 mb-2 h-10 px-5 pr-10 rounded-full text-sm focus:outline-none"
+            className="bg-gray-200 mt-2 mb-2 h-10 px-5 pr-10 rounded-full text-sm focus:outline-none"
           />
           <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
             <svg
@@ -237,7 +239,6 @@ function MobileNav({ router, visible, setVisible, user, styles }) {
   const toggleSearchbar = () => {
     setSearchboxOpen(!searchboxOpen)
   };
-  console.log(searchboxOpen.toString());
   return (
     <div className="sm:hidden w-screen flex justify-center items-center">
       {!searchboxOpen  && 
@@ -257,7 +258,7 @@ function MobileNav({ router, visible, setVisible, user, styles }) {
         </div>
       }
       
-      <Searchbox searchboxOpen={searchboxOpen} />
+      <Searchbox searchboxOpen={searchboxOpen} toggleSearchbar={toggleSearchbar} />
     </div>
   );
 }
