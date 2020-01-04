@@ -11,7 +11,7 @@ import Strings from "../strings";
 const Buttons = ({ selected, select }) => (
   <div>
     <div className="antialiased bg-gray-200 p-8">
-      <div className="flex justify-center">
+      <div className="flex md:justify-center">
         <nav id="nav" className="w-56 relative">
           <span
             className="absolute h-10 w-full bg-white rounded-lg shadow ease-out transition-transform transition-medium"
@@ -189,8 +189,8 @@ const ForumDisplay = ({ select, selected }) => {
   ];
   return (
     <div className="bg-gray-200 ">
-      <div className="container mx-auto flex justify-around">
-        <div className="flex flex-col pt-20">
+      <div className="container mx-auto flex flex-col md:flex-row md:justify-around ">
+        <div className="flex flex-col-reverse px-4 md:flex-col md:pt-20">
           <Buttons select={select} selected={selected} />
           <div className="max-w-xs mt-6">
             <p className="font-extrabold text-2xl text-yume-blue-dark tracking-wider">
@@ -201,7 +201,7 @@ const ForumDisplay = ({ select, selected }) => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-end justify-end mt-12">
+        <div className="flex flex-col items-end justify-end md:mt-12">
           <img
             width={700}
             className="img-shadow rounded-tl-lg rounded-tr-lg"
