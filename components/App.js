@@ -33,7 +33,7 @@ export default ({ children }) => (
   <main className="min-h-screen bg-gray-100">
     <Meta />
     <DynamicHeaderWithNoSSR />
-    {children}
+    <div className="pt-12 sm:pt-0">{children}</div>
     <style jsx global>{`
       * {
         font-family: "Lato", sans-serif;
