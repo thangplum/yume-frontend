@@ -18,4 +18,3 @@ export { default as Reply } from "./Reply";
 export { default as Spinner } from "./Spinner";
 export { default as Submit } from "./Submit";
 export { default as User } from "./User";
-export { default as SearchBox } from "./SearchBox";

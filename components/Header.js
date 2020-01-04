@@ -2,22 +2,22 @@ import React, { useEffect, useCallback, useContext } from "react";
 import Link from "next/link";
 import { withRouter } from "next/router";
 import YumeLogo from "../icons/logo.svg";
-import BurgerMenu from "../icons/burger_menu.svg";
 import User from "./User";
 import { useApolloClient } from "@apollo/react-hooks";
 import { logout } from "../lib/auth";
-import { SearchBox } from ".";
+import { SearchBox, MobileSearchBox, SearchButton } from "./SearchBox";
 import { slide as Menu } from "react-burger-menu";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+
 import { useToggle, ToggleCtxProvider } from "../lib/custom-hooks";
 
-const isPath = (router, path) => router && router.pathname === path;
+const isPath = (router, path) =>
+  router && router.pathname.split("/")[1] === path.split("/")[0];
 
 const [MenuContext, MenuProvider] = ToggleCtxProvider();
 
-const Button = ({ styles }) => {
+const BurgerButton = ({ styles }) => {
   const ctx = useContext(MenuContext);
+
   return (
     <button style={styles.bmBurgerButton} onClick={ctx.toggleMenu}>
       <svg
@@ -30,7 +30,6 @@ const Button = ({ styles }) => {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        class="feather feather-menu"
       >
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -42,9 +41,13 @@ const Button = ({ styles }) => {
 
 const Sidebar = ({ styles, user, router }) => {
   const ctx = useContext(MenuContext);
-  const { isOpen: accountOpen, setIsOpen: setAccountOpen, close } = useToggle(
-    false
-  );
+  const {
+    isOpen: accountOpen,
+    setIsOpen: setAccountOpen,
+    close,
+    open,
+    toggle
+  } = useToggle(false);
   const client = useApolloClient();
   const _handleRouteChange = () => close();
 
@@ -55,202 +58,89 @@ const Sidebar = ({ styles, user, router }) => {
     };
   }, []);
 
+  const SideBarButton = ({ children, path, toggleAccount, ...props }) => (
+    <>
+      <button
+        className={
+          "ripple w-full mt-2 text-xl outline-none focus:outline-none py-3" +
+          (isPath(router, path) ? " text-yume-red" : "")
+        }
+        onClick={() =>
+          setTimeout(() => {
+            if (path === "account") {
+              toggleAccount();
+              return;
+            }
+            ctx.toggleMenu();
+            router.push("/" + path);
+          }, 400)
+        }
+        {...props}
+      >
+        {children}
+      </button>
+      <style jsx>{`
+        .ripple {
+          background-position: center;
+          transition: background 0.8s;
+        }
+        .ripple:hover {
+          background: #edf2f7
+            radial-gradient(circle, transparent 1%, #edf2f7 1%) center/15000%;
+        }
+        .ripple:active {
+          background-color: #a0aec0;
+          background-size: 100%;
+          transition: background 0s;
+        }
+      `}</style>
+    </>
+  );
   return (
     <Menu
       styles={styles}
       customBurgerIcon={false}
       isOpen={ctx.isMenuOpen}
       onStateChange={state => ctx.stateChangeHandler(state)}
+      className={" shadow-xl pt-8 bg-white"}
     >
-      <List disablePadding dense>
-        <React.Fragment key="forum">
-          <ListItem button>
-            <Link href="/forum">
-              <a
-                className={
-                  "mt-2 text-xl " +
-                  (isPath(router, "/forum") ? "text-yume-red" : "")
-                }
-                onClick={ctx.toggleMenu}
+      <ul>
+        <li id="forum">
+          <SideBarButton path="forum">Forum</SideBarButton>
+        </li>
+        <li className="mt-1">
+          {user && (
+            <div className="w-full">
+              <SideBarButton path="account" toggleAccount={() => toggle()}>
+                <div className="w-full flex justify-center items-center text-xl">
+                  Account <ChevronDownSvg />
+                </div>
+              </SideBarButton>
+              <ul
+                className={!accountOpen ? "hidden " : ""}
+                style={{ paddingLeft: 18 }}
               >
-                Forum
-              </a>
-            </Link>
-          </ListItem>
-        </React.Fragment>
-        <React.Fragment key="account">
-          <div className="mt-8">
-            {user && (
-              <div>
-                <ListItem
-                  button
-                  onMouseDown={e => {
-                    e.preventDefault();
-                    close();
+                <SideBarButton path={`profile/${user.username}`}>
+                  Profile
+                </SideBarButton>
+                <SideBarButton path="bookmarks">Bookmarks</SideBarButton>
+                <SideBarButton path="settings">Settings</SideBarButton>
+                <SideBarButton
+                  path="logout"
+                  onClick={() => {
+                    ctx.toggleMenu();
+                    logout(client);
                   }}
-                  onMouseEnter={() => open()}
                 >
-                  <div className="flex items-center text-xl">
-                    Account <ChevronDownSvg />
-                  </div>
-                </ListItem>
-                <List
-                  disablePadding
-                  dense
-                  className={!accountOpen ? "hidden " : ""}
-                  style={{ paddingLeft: 18 }}
-                  onMouseLeave={() => close()}
-                >
-                  <Link
-                    href="/profile/[username]"
-                    as={`/profile/${user.username}`}
-                  >
-                    <a
-                      className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
-                        router && router.pathname.split("/")[1] === "profile"
-                          ? " text-yume-red"
-                          : ""
-                      }`}
-                      onClick={ctx.toggleMenu}
-                    >
-                      Profile
-                    </a>
-                  </Link>
-
-                  <Link href="/bookmarks">
-                    <a
-                      className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
-                        router && router.pathname.split("/")[1] === "bookmarks"
-                          ? " text-yume-red"
-                          : ""
-                      }`}
-                      onClick={ctx.toggleMenu}
-                    >
-                      Bookmarks
-                    </a>
-                  </Link>
-                  <Link href="/settings">
-                    <a
-                      className={`flex w-full px-4 py-3 hover:bg-gray-200 ${
-                        router && router.pathname.split("/")[1] === "settings"
-                          ? " text-yume-red"
-                          : ""
-                      }`}
-                      onClick={ctx.toggleMenu}
-                    >
-                      Settings
-                    </a>
-                  </Link>
-
-                  <li className="flex w-full px-4 py-3 hover:bg-gray-200 ">
-                    <button
-                      className="font-medium"
-                      onMouseEnter={ctx.toggleMenu}
-                      onClick={() => {
-                        logout(client);
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </List>
-              </div>
-            )}
-          </div>
-          {!user && (
-            <ListItem button>
-              <Link href="/login">
-                <a
-                  href="/login"
-                  className={
-                    "ml-0 text-xl " +
-                    (isPath(router, "/login") ? "text-yume-red" : "")
-                  }
-                  onClick={ctx.toggleMenu}
-                >
-                  Log In
-                </a>
-              </Link>
-            </ListItem>
+                  Logout
+                </SideBarButton>
+              </ul>
+            </div>
           )}
-        </React.Fragment>
-      </List>
+          {!user && <SideBarButton path="login">Log In</SideBarButton>}
+        </li>
+      </ul>
     </Menu>
-  );
-};
-
-const SearchButton = ({ toggleSearchbar }) => {
-  return (
-    <div>
-      <button
-        className="absolute right-0 top-0 mt-6 mr-8"
-        onClick={toggleSearchbar}
-      >
-        <svg
-          className="h-4 w-4 fill-current"
-          version="1.1"
-          id="Capa_1"
-          x="0px"
-          y="0px"
-          viewBox="0 0 56.966 56.966"
-          enableBackground="new 0 0 56.966 56.966"
-          xml-space="preserve"
-          className="w-5"
-        >
-          <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-        </svg>
-      </button>
-    </div>
-  );
-};
-
-const MobileSearchBox = ({ searchboxOpen, toggleSearchbar }) => {
-  if (!searchboxOpen) {
-    return null;
-  }
-  return (
-    <form action="/search" className="flex w-full">
-      <button className="mx-4" onClick={toggleSearchbar}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-      </button>
-      <div className="relative flex w-full text-gray-600 mr-4">
-        <input
-          type="search"
-          name="query"
-          placeholder="Search"
-          className="w-full bg-gray-200 mt-2 mb-2 h-10 px-5 pr-10 rounded-full text-sm focus:outline-none"
-        />
-        <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
-          <svg
-            className="h-4 w-4 fill-current"
-            version="1.1"
-            id="Capa_1"
-            x="0px"
-            y="0px"
-            viewBox="0 0 56.966 56.966"
-            enableBackground="new 0 0 56.966 56.966"
-            xml-space="preserve"
-            width="512px"
-            height="512px"
-          >
-            <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-          </svg>
-        </button>
-      </div>
-    </form>
   );
 };
 
@@ -263,7 +153,7 @@ function MobileNav({ router, visible, setVisible, user, styles }) {
         <div>
           <MenuProvider>
             <div>
-              <Button styles={styles} />
+              <BurgerButton styles={styles} />
               <Sidebar
                 styles={styles}
                 user={user}
@@ -317,7 +207,7 @@ function AccountDropDown({ user, router }) {
         }}
         onMouseEnter={() => open()}
       >
-        <div className="flex items-center mr-1 font-medium">
+        <div className="flex items-center mr-1 font-semibold">
           Account <ChevronDownSvg />
         </div>
       </button>
@@ -364,7 +254,7 @@ function AccountDropDown({ user, router }) {
         </Link>
 
         <li className="flex w-full px-4 py-3 hover:bg-gray-200 ">
-          <button className="font-medium" onClick={() => logout(client)}>
+          <button className="font-semibold" onClick={() => logout(client)}>
             Logout
           </button>
         </li>
@@ -379,11 +269,11 @@ const NavLogo = ({ router }) => (
       <img
         className={
           "w-8 h-8 inline-block " +
-          (isPath(router, "/") ? "mr-4  w-10 h-10" : " mr-2")
+          (isPath(router, "") ? "mr-4  w-10 h-10" : " mr-2")
         }
         src={YumeLogo}
       />
-      <p className={isPath(router, "/") ? "text-2xl" : "text-xl"}>yume</p>
+      <p className={isPath(router, "") ? "text-2xl" : "text-xl"}>yume</p>
     </a>
   </Link>
 );
@@ -416,7 +306,7 @@ function Header({ router, pageWrapID }) {
                     <SearchBox />
                   </div>
                 )}
-                <div className="mr-6 font-medium flex items-center justify-end w-4/12 font-semibold text-black">
+                <div className="mr-6 flex items-center justify-end w-4/12 font-semibold text-black">
                   <div>
                     {me && <AccountDropDown user={me} router={router} />}
                   </div>
@@ -426,7 +316,7 @@ function Header({ router, pageWrapID }) {
                         href="/login"
                         className={
                           "ml-8 " +
-                          (isPath(router, "/login") ? "text-yume-red" : "")
+                          (isPath(router, "login") ? "text-yume-red" : "")
                         }
                       >
                         Log In
@@ -437,7 +327,7 @@ function Header({ router, pageWrapID }) {
                     <a
                       className={
                         "ml-8 " +
-                        (isPath(router, "/forum") ? "text-yume-red" : "")
+                        (isPath(router, "forum") ? "text-yume-red" : "")
                       }
                     >
                       Forum
@@ -466,7 +356,7 @@ const ChevronDownSvg = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className="feather feather-chevron-down"
@@ -483,15 +373,12 @@ const styles = {
     left: "20px",
     top: "20px"
   },
-  bmBurgerBars: {
-    background: "#373a47"
-  },
-  bmBurgerBarsHover: {
-    background: "#a90000"
+  bmItem: {
+    outline: 0
   },
   bmCrossButton: {
-    height: "24px",
-    width: "24px"
+    height: "32px",
+    width: "32px"
   },
   bmCross: {
     background: "#292b2b"
@@ -503,12 +390,8 @@ const styles = {
     left: "0",
     width: "200px"
   },
-  bmMenu: {
-    background: "#88d9db",
-    padding: "2em 0 0"
-  },
   bmMorphShape: {
-    fill: "#88d9db"
+    fill: "#fff"
   },
   bmOverlay: {
     background: "rgba(0, 0, 0, 0)"
