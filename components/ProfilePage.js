@@ -98,25 +98,27 @@ function ProfilePage() {
           <h2 className="w-full text-2xl text-yume-red mb-4">
             {user.firstName} {user.lastName}'s Posts
           </h2>
-          <Buttons>
-            <LeftPageButton
-              router={router}
-              title="Previous"
-              page={page - 1}
-              username={username}
-              isHidden={page === 1}
-            />
-            <p className="mr-4 text-gray-600">
-              {page} of {pages}
-            </p>
-            <RightPageButton
-              router={router}
-              title="Next"
-              page={page + 1}
-              username={username}
-              isHidden={page === pages}
-            />
-          </Buttons>
+          {pages !== 0 && (
+            <Buttons>
+              <LeftPageButton
+                router={router}
+                title="Previous"
+                page={page - 1}
+                username={username}
+                isHidden={page === 1}
+              />
+              <p className="mr-4 text-gray-600">
+                {page} of {pages}
+              </p>
+              <RightPageButton
+                router={router}
+                title="Next"
+                page={page + 1}
+                username={username}
+                isHidden={page === pages}
+              />
+            </Buttons>
+          )}
         </div>
         <div>
           {posts.map(post => (
