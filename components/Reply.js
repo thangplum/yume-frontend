@@ -149,7 +149,7 @@ function Reply({
                 <p className="ml-2">{rating} Points</p>
               </div>
             </ReplyActions>
-            {me && (
+            {me && me.id === author.id && (
               <ReplyOptions
                 user={me}
                 replyId={id}
@@ -211,9 +211,9 @@ function ReplyOptions({ user, replyId, replyAuthor, postSlug }) {
           " bg-white rounded shadow-md border z-10 mr-4 mt-2"
         }
       >
-        <button className="flex w-full items-center px-4 pt-3 pb-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
+        {/* <button className="flex w-full items-center px-4 pt-3 pb-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
           <FlagSvg /> Report
-        </button>
+        </button> */}
         {isReplyAuthor && (
           <button
             onMouseDown={_handleDeleteReplyClick}

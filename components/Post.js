@@ -12,6 +12,8 @@ import { FacebookShareButton, TwitterShareButton } from "react-share";
 import FacebookIcon from "../icons/f_logo.png";
 import TwitterIcon from "../icons/twitter_logo.svg";
 import RenderText from "./RenderText";
+import ReportEditor from "./ReportEditor";
+import { useToggle } from "../lib/custom-hooks";
 
 const UPVOTE_POST_MUTATION = gql`
   mutation UPVOTE_POST_MUTATION($postId: ID!) {
@@ -97,6 +99,9 @@ function Post({
 }) {
   const [upvotePost] = useMutation(UPVOTE_POST_MUTATION);
   const [downvotePost] = useMutation(DOWNVOTE_POST_MUTATION);
+  const { isOpen: isReportEditorOpen, setIsOpen: setReportEditor } = useToggle(
+    false
+  );
 
   const _handleUpVoteClick = () => {
     upvotePost({
@@ -195,7 +200,19 @@ function Post({
                 </TwitterShareButton>
               </div>
             </PostActions>
-            {me && <PostOptions user={me} postId={id} postAuthor={author} />}
+            {me && (
+              <PostOptions
+                user={me}
+                postId={id}
+                postAuthor={author}
+                openReportEditor={() => setReportEditor(true)}
+              />
+            )}
+            <ReportEditor
+              isEditorOpen={isReportEditorOpen}
+              setIsEditorOpen={setReportEditor}
+              postId={id}
+            />
           </PostContainer>
         );
       }}
@@ -210,7 +227,7 @@ Post.defaultProps = {
   numReplies: 0
 };
 
-function PostOptions({ user, postId, postAuthor }) {
+function PostOptions({ user, postId, postAuthor, openReportEditor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [bookmarkPost] = useMutation(BOOKMARK_POST_MUTATION);
   const [unbookmarkPost] = useMutation(UNBOOKMARK_POST_MUTATION);
@@ -272,10 +289,14 @@ function PostOptions({ user, postId, postAuthor }) {
           <BookmarkSvg isBookmarked={isBookmarked} />{" "}
           {isBookmarked ? "UnBookmark" : "Bookmark"}
         </button>
-        {/* 
-        <button className="flex w-full items-center px-4 py-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
+
+        <button
+          onMouseDown={() => openReportEditor()}
+          className="flex w-full items-center px-4 py-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none"
+        >
           <FlagSvg /> Report
-        </button> */}
+        </button>
+
         {isPostAuthor && (
           <button
             onMouseDown={_handleDeletePostClick}

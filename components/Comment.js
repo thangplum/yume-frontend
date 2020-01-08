@@ -58,7 +58,7 @@ function Comment({ comment, author, id, postSlug }) {
               </Link>
             </CommentAuthor>
             <CommentText>{comment}</CommentText>
-            {me && (
+            {me && me.id === author.id && (
               <CommentOptions
                 user={me}
                 commentId={id}
@@ -119,9 +119,9 @@ function CommentOptions({ user, commentId, commentAuthor, postSlug }) {
           " bg-white rounded shadow-md border z-10 mr-4 mt-2"
         }
       >
-        <button className="flex w-full items-center px-4 pt-3 pb-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
+        {/* <button className="flex w-full items-center px-4 pt-3 pb-2 hover:bg-gray-200 cursor-pointer outline-none focus:outline-none">
           <FlagSvg /> Report
-        </button>
+        </button> */}
         {isCommentAuthor && (
           <button
             onMouseDown={_handleDeleteCommentClick}
